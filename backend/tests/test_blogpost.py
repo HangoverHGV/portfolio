@@ -88,3 +88,74 @@ class TestBlogPost:
             "created_at": response.json()['created_at'],
             "updated_at": response.json()['updated_at']
         }
+
+    def test_edit_unauthorized(self, client_with_db):
+        user = self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.put("/blogpost/1", json={"title": "Updated Title", "content": "Updated Content"})
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+
+    def test_edit_blogpost(self, client_with_db):
+        self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.put("/blogpost/1", json={"title": "Updated Title", "content": "Updated Content"},
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "title": "Updated Title",
+            "content": "Updated Content",
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
+    def test_edit_only_title(self, client_with_db):
+        self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.put("/blogpost/1", json={"title": "Updated Title"},
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "title": "Updated Title",
+            "content": "This is a test blog post.",
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+    def test_edit_only_content(self, client_with_db):
+        self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.put("/blogpost/1", json={"content": "Updated Content"},
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "title": "Test Blog Post",
+            "content": "Updated Content",
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
+    def test_delete_unauthorized(self, client_with_db):
+        self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.delete("/blogpost/1")
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+
+    def test_delete_blogpost(self, client_with_db):
+        self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.delete("/blogpost/1", headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {"detail": "Blog Post deleted successfully"}

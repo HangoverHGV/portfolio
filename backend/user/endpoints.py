@@ -141,7 +141,7 @@ async def delete_user(user_id: int, db: SessionLocal = Depends(get_db), current_
     return {"detail": "User deleted successfully"}
 
 
-@router.post("/superuser/", tags=["user"], status_code=status.HTTP_201_CREATED, responses=USER_POST_RESPONSE_CONFIG)
+@router.post("/superuser", tags=["user"], status_code=status.HTTP_201_CREATED, responses=USER_POST_RESPONSE_CONFIG)
 async def create_superuser(user: SuperUserCreate, db: SessionLocal = Depends(get_db)):
     if user.secret_token != SUPERUSER_SECRET_TOKEN:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid secret token")

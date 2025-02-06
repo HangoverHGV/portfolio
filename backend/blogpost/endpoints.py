@@ -1,3 +1,4 @@
+from anyio import current_effective_deadline
 from fastapi import (APIRouter, Depends, HTTPException, status)
 from user.models import BlogPost, User
 from configs import get_db, SessionLocal
@@ -46,7 +47,7 @@ async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends
     }
 
 # GET a Blogpost by ID
-@router.get("/{blogpost_id}", tags=["blogpost"], status_code=status.HTTP_200_OK,responses=BLOGPOST_GET_RESPONE_CONFIG)
+@router.get("/{blogpost_id}", tags=["blogpost"], status_code=status.HTTP_200_OK,responses=BLOGPOST_POST_RESPONSE_CONFIG)
 async def get_blogpost(blogpost_id: int, db: SessionLocal = Depends(get_db)):
     if not blogpost_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
@@ -64,3 +65,52 @@ async def get_blogpost(blogpost_id: int, db: SessionLocal = Depends(get_db)):
         'updated_at': blogpost.updated_at
     }
 
+# Edit a Blogpost by ID
+@router.put("/{blogpost_id}", tags=["blogpost"], status_code=status.HTTP_200_OK, responses=BLOGPOST_PUT_RESPONSE_CONFIG)
+def edit_blogpost(blogpost_id: int, blogpost: BlogPostEdit, current_user: User = Depends(get_current_user), db=Depends(get_db)):
+
+    blogpost_db = db.query(BlogPost).filter(BlogPost.id == blogpost_id).first()
+
+    if not current_user.is_superuser and not current_user.is_active or current_user.id != blogpost_db.user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if not blogpost_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
+
+    if not blogpost:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
+
+    if blogpost.title is not None:
+        blogpost_db.title = blogpost.title
+    if blogpost.content is not None:
+        blogpost_db.content = blogpost.content
+    db.commit()
+    db.refresh(blogpost_db)
+
+    return {
+        'id': blogpost_db.id,
+        'title': blogpost_db.title,
+        'content': blogpost_db.content,
+        'user_id': blogpost_db.user_id,
+        'created_at': blogpost_db.created_at,
+        'updated_at': blogpost_db.updated_at
+    }
+
+@router.delete("/{blogpost_id}", tags=["blogpost"], status_code=status.HTTP_200_OK)
+async def delete_blogpost(blogpost_id: int, current_user: User = Depends(get_current_user), db=Depends(get_db)):
+    blogpost = db.query(BlogPost).filter(BlogPost.id == blogpost_id).first()
+
+    if not current_user.is_superuser and not current_user.is_active or current_user.id != blogpost.user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if not blogpost_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
+
+    if not blogpost:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
+
+    db.delete(blogpost)
+    db.commit()
+    return {
+        'detail': 'Blog Post deleted successfully'
+    }
