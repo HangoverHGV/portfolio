@@ -3,7 +3,7 @@ This file contains the User model.
 """
 
 from database import Base
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, Date, ForeignKey, event
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, Date, ForeignKey, event, Text
 from sqlalchemy.orm import relationship
 import datetime
 from passlib.context import CryptContext
@@ -22,6 +22,8 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
 
+    blog_posts = relationship("BlogPost", back_populates="user")
+
     def verify_password(self, password):
         return pwd_context.verify(password, self.hashed_password)
 
@@ -29,4 +31,16 @@ class User(Base):
         self.hashed_password = pwd_context.hash(password)
 
 
+class BlogPost(Base):
+    __tablename__ = "blog_posts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    content = Column(Text)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+    user = relationship("User", back_populates="blog_posts")
+
+    created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
 
