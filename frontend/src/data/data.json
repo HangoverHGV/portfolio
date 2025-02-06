@@ -1,7 +1,7 @@
 {
   "aboutme": {
     "title": "About Me",
-    "content": "I am a Python Developer with a strong passion for coding and a desire to learn new technologies. I have a solid understanding of the basics of Python programming. I am comfortable working on medium-sized projects and am able to deliver clean, efficient and well-documented code. I am highly motivated and eager to learn, and I am always looking for opportunities to improve my skills and grow as a developer. I am a team player and have great manager and communication skills which help me to work effectively with a team."
+    "description": "I am a Python Developer with a strong passion for coding and a desire to learn new technologies. I have a solid understanding of the basics of Python programming. I am comfortable working on medium-sized projects and am able to deliver clean, efficient and well-documented code. I am highly motivated and eager to learn, and I am always looking for opportunities to improve my skills and grow as a developer. I am a team player and have great manager and communication skills which help me to work effectively with a team."
   },
   "workexperience": [
     {
@@ -13,23 +13,23 @@
       "description": "At Bosch was a great experience, I have learned a lot of things and I have worked on a lot of projects.",
       "projects": [
         {
-          "name": "Refactoring internal tools",
+          "title": "Refactoring internal tools",
           "description": "Refactoring internal tools to make them more efficient and easier to maintain."
         },
         {
-          "name": "Safety and Comfort functions simulator with GUI",
+          "title": "Safety and Comfort functions simulator with GUI",
           "description": "We integrated one internal software that simulates the radar from a car and we integrated with and open source software that presents the car. The open source software was Esmini.\nBesides integrating this two software we also created a scenario generator that parse and create new XOSC and XODR files."
         },
         {
-          "name": "ML model for predicting the false activation of the radar",
+          "title": "ML model for predicting the false activation of the radar",
           "description": "I created a ML model that predicts the false activation of the radar. I used the data from the radar and already labeled data to train the model."
         },
         {
-          "name": "A2L file parser",
+          "title": "A2L file parser",
           "description": "I worked in a team of 7 people using the Agile methodology. The parser was already and we had to maintain it, add new featurea, fix bugs and improve the performance."
         },
         {
-          "name": "Jira automation watchdog",
+          "title": "Jira automation watchdog",
           "description": "This project started as somthing very small but it grow a lot. First requirement was to have a json file with all filters used for finding specific tickets and add a custom comment to them. But after a while the need of adding filters and new comments for diffrent types of situations made the initial solution not suited anymore. So I split the project in three parts. The first part was the watchdog that had suffered minor changes. It shares a container with the backend that is responsible for CRUD operations between frontend and the database written in Python using FastAPI framework. The last part is a frontend written in react that is used to add new filters and comments. After the bot was functional I had to host it somewhere. For that I used an Ubuntu server here i used docker to deply it and configured a nginx server to redirect the traffic to the bot."
         }
       ],
@@ -45,6 +45,7 @@
     }
   ],
   "freelancing": {
+    "title": null,
     "start-date": "2023",
     "end-date": "Present",
     "short-description": "As a freelancer I worked on many types of projects",
@@ -75,5 +76,50 @@
         "image": null
       }
     ]
-  }
+  },
+  "personalprojects": [
+    {
+      "start-date": null,
+      "end-date": null,
+      "company": null,
+      "location": null,
+      "projects": null,
+      "title": "Python package to have a improved test preview",
+      "description": "I created a Python package that allows you to preview and run the test in a more user-friendly way. The package is available on PyPI and can be installed using pip. The package is called <a href=\"https://pypi.org/project/better-test-preview/\">better-test-preview</a>."
+    },
+    {
+      "start-date": null,
+      "end-date": null,
+      "company": null,
+      "location": null,
+      "projects": null,
+      "title": "Home Lab",
+      "description": "I have a home lab where I test new technologies and create small projects. I installed Proxmox on an old computer and created a few virtual machines. On them I have a VPN connector, an add-free DNS server, Home Assistant and a Kalilinux machine to test security."
+    }
+  ],
+  "education": [
+    {
+      "start-date": "2018",
+      "end-date": "2023",
+      "title": "Bachelor's degree in Electrical Engineering",
+      "school": "Technical University of Cluj-Napoca",
+      "location": "Cluj-Napoca, Romania",
+      "projects": null,
+      "description": "I studied Electrical Engineering at the Technical University of Cluj-Napoca. I learned about electrical circuits, electronics, programming, and other related subjects.\nGraduation project: Smart Indoor Positioning System using BLE technology.",
+      "skills": [
+        "Python",
+        "C",
+        "C++",
+        "Matlab",
+        "Arduino",
+        "Raspberry Pi",
+        "Advanced Mathematics",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "C#",
+        "Algorithms"
+      ]
+    }
+  ]
 }

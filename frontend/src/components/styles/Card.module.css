@@ -16,3 +16,40 @@
     font-size: 1.2em;
     line-height: 1.5;
 }
+.tabContainer {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tabContainer button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #5C8374;
+    color: black;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+.tabContainer button:hover {
+    background-color: #93B1A6;
+}
+
+.tabContainer button:focus {
+    outline: none;
+    background-color: #605c5c;
+}
+
+.tabContent {
+    padding: 20px;
+    background-color: #5C8374;
+    color: #333;
+}
+.tabContainerContainer{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+
