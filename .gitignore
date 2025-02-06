@@ -220,6 +220,7 @@ cmake-build-*/
 
 # File-based project format
 *.iws
+./backend/test.db
 
 # IntelliJ
 out/
