@@ -16,10 +16,12 @@
     font-size: 1.2em;
     line-height: 1.5;
 }
+
 .tabContainer {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
+    border-radius: 10px;
 }
 
 .tabContainer button {
@@ -32,6 +34,7 @@
     border-radius: 4px;
     transition: background-color 0.3s;
 }
+
 .tabContainer button:hover {
     background-color: #93B1A6;
 }
@@ -45,11 +48,54 @@
     padding: 20px;
     background-color: #5C8374;
     color: #333;
+    border-radius: 10px;
+
 }
-.tabContainerContainer{
+.subTabContainer {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     margin-bottom: 20px;
 }
 
+.subTabButtonContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.subTabButtonContainer button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #183D3D;
+    color: #93B1A6;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.subTabButtonContainer button:hover {
+    background-color: #93B1A6;
+}
+
+.subTabButtonContainer button:focus {
+    outline: none;
+    background-color: #605c5c;
+}
+
+.subTabContent {
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+    background-color: #93B1A6;
+    border-radius: 10px;
+}
+
+.container{
+    outline: #61dafb solid 5px;
+    padding: 10px;
+    border-radius: 10px;
+}
 
