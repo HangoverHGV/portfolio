@@ -1,0 +1,18 @@
+
+.aboutmeContainer {
+    margin-top: 20px;
+    background-color: #5C8374;
+    padding: 20px;
+    border-radius: 10px;
+    color: #333;
+}
+
+.aboutmeTitle {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.aboutmeContent {
+    font-size: 1.2em;
+    line-height: 1.5;
+}
