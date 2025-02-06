@@ -48,6 +48,8 @@ async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends
 # GET a Blogpost by ID
 @router.get("/{blogpost_id}", tags=["blogpost"], status_code=status.HTTP_200_OK,responses=BLOGPOST_GET_RESPONE_CONFIG)
 async def get_blogpost(blogpost_id: int, db: SessionLocal = Depends(get_db)):
+    if not blogpost_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
     blogpost = db.query(BlogPost).filter(BlogPost.id == blogpost_id).first()
 
     if not blogpost:

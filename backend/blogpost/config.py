@@ -41,6 +41,16 @@ BLOGPOST_GET_RESPONE_CONFIG = {
             },
         },
         "description": "Blog Post fetched successfully"
+    },
+    404: {
+        "description": "Blog Post not found",
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Blog Post not found"
+                }
+            }
+        }
     }
 }
 

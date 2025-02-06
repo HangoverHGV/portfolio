@@ -69,3 +69,22 @@ class TestBlogPost:
             "created_at": response.json()['created_at'],
             "updated_at": response.json()['updated_at']
         }
+
+    def test_get_blogpost_not_found(self, client_with_db):
+        response = client_with_db.get("/blogpost/1")
+        assert response.status_code == 404
+
+    def test_get_blogpost(self, client_with_db):
+        user = self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.get("/blogpost/1")
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "title": "Test Blog Post",
+            "content": "This is a test blog post.",
+            "user_id": user.json()['id'],
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }

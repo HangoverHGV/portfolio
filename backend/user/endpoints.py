@@ -13,7 +13,7 @@ from fastapi import (APIRouter, Depends, HTTPException, status)
 from configs import get_db, SessionLocal, ACCESS_TOKEN_EXPIRE_DAYS
 from fastapi.security import OAuth2PasswordRequestForm
 from user.models import User
-from user.schema import UserCreate, UserEdit
+from user.schema import UserCreate, UserEdit, SuperUserCreate
 from user.config import *
 from datetime import timedelta
 from user.dependencies import authenticate_user, create_access_token, get_current_user
@@ -142,7 +142,7 @@ async def delete_user(user_id: int, db: SessionLocal = Depends(get_db), current_
 
 
 @router.post("/superuser/", tags=["user"], status_code=status.HTTP_201_CREATED, responses=USER_POST_RESPONSE_CONFIG)
-async def create_superuser(user: UserCreate, db: SessionLocal = Depends(get_db)):
+async def create_superuser(user: SuperUserCreate, db: SessionLocal = Depends(get_db)):
     if user.secret_token != SUPERUSER_SECRET_TOKEN:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid secret token")
 

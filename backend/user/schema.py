@@ -10,8 +10,6 @@ class UserCreate(BaseModel):
     name : str
     email: str
     password: str
-    is_superuser: Optional[bool] = False
-    secret_token: Optional[str] = None
 
 
 class UserEdit(BaseModel):
@@ -29,3 +27,9 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: str
+
+class SuperUserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+    secret_token: str
