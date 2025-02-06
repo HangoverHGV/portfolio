@@ -31,7 +31,7 @@ async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends
     if not current_user.is_superuser and not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated or not authorized")
 
-    blogpost = BlogPost(**blogpost.model_dump())
+    blogpost = BlogPost(**blogpost.model_dump(), user_id=current_user.id)
     db.add(blogpost)
     db.commit()
     db.refresh(blogpost)
@@ -40,7 +40,7 @@ async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends
         'id': blogpost.id,
         'title': blogpost.title,
         'content': blogpost.content,
-        'user_id': current_user.id,
+        'user_id': blogpost.id,
         'created_at': blogpost.created_at,
         'updated_at': blogpost.updated_at
     }
