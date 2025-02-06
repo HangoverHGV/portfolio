@@ -10,7 +10,7 @@ services:
       - "8000:8000"
     command: "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
     volumes:
-      - ../backend:/app
+      - ./backend:/app
       - dev-static-data:/api/static
     environment:
       POSTGRES_HOST: db
