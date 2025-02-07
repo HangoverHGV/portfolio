@@ -32,15 +32,6 @@
           "title": "Jira automation watchdog",
           "description": "This project started as somthing very small but it grow a lot. First requirement was to have a json file with all filters used for finding specific tickets and add a custom comment to them. But after a while the need of adding filters and new comments for diffrent types of situations made the initial solution not suited anymore. So I split the project in three parts. The first part was the watchdog that had suffered minor changes. It shares a container with the backend that is responsible for CRUD operations between frontend and the database written in Python using FastAPI framework. The last part is a frontend written in react that is used to add new filters and comments. After the bot was functional I had to host it somewhere. For that I used an Ubuntu server here i used docker to deply it and configured a nginx server to redirect the traffic to the bot."
         }
-      ],
-      "skills": [
-        "Python",
-        "Docker",
-        "FastAPI",
-        "React",
-        "Nginx",
-        "Jira",
-        "Git"
       ]
     }
   ],
@@ -105,21 +96,27 @@
       "school": "Technical University of Cluj-Napoca",
       "location": "Cluj-Napoca, Romania",
       "projects": null,
-      "description": "I studied Electrical Engineering at the Technical University of Cluj-Napoca. I learned about electrical circuits, electronics, programming, and other related subjects.\nGraduation project: Smart Indoor Positioning System using BLE technology.",
-      "skills": [
-        "Python",
-        "C",
-        "C++",
-        "Matlab",
-        "Arduino",
-        "Raspberry Pi",
-        "Advanced Mathematics",
-        "HTML",
-        "CSS",
-        "JavaScript",
-        "C#",
-        "Algorithms"
-      ]
+      "description": "I studied Electrical Engineering at the Technical University of Cluj-Napoca. I learned about electrical circuits, electronics, programming, and other related subjects.\nGraduation project: Smart Indoor Positioning System using BLE technology."
     }
+  ],
+  "skills": [
+    "Python",
+    "Docker",
+    "FastAPI",
+    "React",
+    "Nginx",
+    "Jira",
+    "Git",
+    "C",
+    "C++",
+    "Matlab",
+    "Arduino",
+    "Raspberry Pi",
+    "Advanced Mathematics",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "C#",
+    "Algorithms"
   ]
 }

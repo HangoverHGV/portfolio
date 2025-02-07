@@ -87,16 +87,19 @@
 
 .subTabContent {
     margin-top: 20px;
-    text-align: center;
+    text-align: left;
     width: 100%;
     background-color: #93B1A6;
     border-radius: 10px;
+    padding-left: 10px;
 }
 
 .container{
     outline: #183D3D solid 5px;
     padding: 10px;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 .title{
     font-size: 1.5em;
@@ -111,5 +114,13 @@
     flex-direction: row;
     justify-content: space-around;
     margin-bottom: 20px;
-    flex-wrap: wrap; /* Add this line to wrap the skills if they overflow */
+    flex-wrap: wrap;
+}
+.skillContainer h4 {
+    font-size: 1em;
+    margin-bottom: 10px;
+    background-color: #183D3D;
+    padding: 5px 10px;
+    color: #93B1A6;
+    border-radius: 10px;
 }

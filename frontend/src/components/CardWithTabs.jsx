@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import styles from "./styles/Card.module.css";
 
 
-
 export default function CardWithTabs({data}) {
     const [activeTab, setActiveTab] = useState("workexperience");
     const [activeSubTab, setActiveSubTab] = useState(1);
@@ -21,22 +20,15 @@ export default function CardWithTabs({data}) {
                                 <p className={styles.aboutmeContent}>{item.description}</p>
                                 <div className={styles.subTabContainer}>
                                     <div className={styles.subTabButtonContainer}>
-                                    {item.projects.map((project, index) => (
-                                        <button key={index}
-                                                onClick={() => setActiveSubTab(index + 1)}>{project.title}</button>
-                                    ))}
-                                        </div>
+                                        {item.projects.map((project, index) => (
+                                            <button key={index}
+                                                    onClick={() => setActiveSubTab(index + 1)}>{project.title}</button>
+                                        ))}
+                                    </div>
                                     <div className={styles.subTabContent}>
                                         <h3>{item.projects[activeSubTab - 1].title}</h3>
                                         <p>{item.projects[activeSubTab - 1].description}</p>
                                     </div>
-                                </div>
-                                <div className={styles.subTabContainer}>
-                                    {item.skills.map((skill, index) => (
-                                        <div key={index} className={styles.skillContainer}>
-                                            <h4>{skill}</h4>
-                                        </div>
-                                    ))}
                                 </div>
                             </div>
                         ))}
