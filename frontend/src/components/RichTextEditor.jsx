@@ -1,5 +1,5 @@
-import React, {useEffect, useRef} from "react";
-import ReactQuill, {Quill} from "react-quill";
+import React, { useEffect, useRef, useState } from "react";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize";
 import styles from "./styles/RichTextEditor.module.css";
@@ -7,8 +7,20 @@ import styles from "./styles/RichTextEditor.module.css";
 // Register the image resize module
 Quill.register("modules/imageResize", ImageResize);
 
-export default function RichTextEditor({value, onChange}) {
+export default function RichTextEditor({ value, onChange }) {
     const quillRef = useRef(null);
+    const [editorHeight, setEditorHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setEditorHeight(window.innerHeight);
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         if (quillRef.current) {
@@ -21,10 +33,10 @@ export default function RichTextEditor({value, onChange}) {
 
     const modules = {
         toolbar: [
-            [{'list': 'ordered'}, {'list': 'bullet'}],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
             ['bold', 'italic', 'underline'],
-            [{'header': [1, 2, 3, 4, 5, 6, false]}],
-            [{'align': []}],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'align': [] }],
             ['link', 'image'],
             ['clean']
         ],
@@ -35,7 +47,7 @@ export default function RichTextEditor({value, onChange}) {
 
     return (
         <div>
-            <div className={styles.editorContainer}>
+            <div className={styles.editorContainer} style={{ height: editorHeight }}>
                 <ReactQuill
                     ref={quillRef}
                     theme="snow"

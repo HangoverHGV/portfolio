@@ -54,7 +54,7 @@ export default function Post() {
                         "Authorization": `Bearer ${token}`
                     }
                 });
-                if (response.status === 204) {
+                if (response.status === 200) {
                     alert("Post deleted successfully");
                     navigate("/blog");
                 } else {
