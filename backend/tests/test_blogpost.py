@@ -159,3 +159,12 @@ class TestBlogPost:
         response = client_with_db.delete("/blogpost/1", headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 200
         assert response.json() == {"detail": "Blog Post deleted successfully"}
+
+    def test_delete_blogpost_with_superuser(self, client_with_db):
+        self.create_user(client_with_db, user1)
+        self.create_superuser(client_with_db, superuser_json)
+        token = self.get_token(client_with_db, superuser_json['email'], superuser_json['password'])
+        self.create_blogpost(client_with_db, blogpost1, token)
+        response = client_with_db.delete("/blogpost/1", headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {"detail": "Blog Post deleted successfully"}
