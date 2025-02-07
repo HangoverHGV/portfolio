@@ -56,6 +56,35 @@ BLOGPOST_GET_RESPONSE_CONFIG = {
     }
 }
 
+BLOGPOST_GET_ONE_RESPONSE_CONFIG = {
+    200: {
+        "description": "Blog Post fetched successfully",
+        "content": {
+            "application/json": {
+                "example": {
+                    "id": 1,
+                    "title": "Blog Post 1",
+                    "content": "Content of blog post 1",
+                    "user_id": 1,
+                    "user_name": "John Doe",
+                    "created_at": "2021-01-01T00:00:00",
+                    "updated_at": "2021-01-01T00:00:00"
+                }
+            },
+        },
+    },
+    404: {
+        "description": "Blog Post not found",
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Blog Post not found"
+                }
+            }
+        }
+    }
+}
+
 BLOGPOST_POST_RESPONSE_CONFIG = {
     201:{
         "description": "Blog Post created successfully",

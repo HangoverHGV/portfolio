@@ -14,7 +14,6 @@ import React, { useState, useEffect } from "react";
                                                     const response = await fetch(`http://127.0.0.1:8000/blogpost/${postId}`);
                                                     const data = await response.json();
                                                     setPost(data);
-                                                    console.log(data);
                                                 } catch (error) {
                                                     console.error("Error fetching post:", error);
                                                 }
