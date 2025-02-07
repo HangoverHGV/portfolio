@@ -5,16 +5,29 @@ import styles from "./styles/AdminTable.module.css";
 export default function AdminTable() {
     const [allUsers, setAllUsers] = useState([]);
     const [allPosts, setAllPosts] = useState([]);
+    const [token, setToken] = useState("");
 
     useEffect(() => {
+        // Fetch the token from local storage or any other secure place
+        const storedToken = localStorage.getItem("token");
+        setToken(storedToken);
+
         // Fetch all users
-        fetch("http://127.0.0.1:8000/user/")
+        fetch("http://127.0.0.1:8000/user/", {
+            headers: {
+                "Authorization": `Bearer ${storedToken}`
+            }
+        })
             .then(response => response.json())
             .then(data => setAllUsers(data))
             .catch(error => console.error("Error fetching users:", error));
 
         // Fetch all posts
-        fetch("http://127.0.0.1:8000/blogpost/")
+        fetch("http://127.0.0.1:8000/blogpost/", {
+            headers: {
+                "Authorization": `Bearer ${storedToken}`
+            }
+        })
             .then(response => response.json())
             .then(data => setAllPosts(data))
             .catch(error => console.error("Error fetching blog posts:", error));
@@ -22,7 +35,10 @@ export default function AdminTable() {
 
     const handleDeleteUser = (userId) => {
         fetch(`http://127.0.0.1:8000/user/${userId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         })
             .then(response => {
                 if (response.ok) {
@@ -36,7 +52,10 @@ export default function AdminTable() {
 
     const handleDeletePost = (postId) => {
         fetch(`http://127.0.0.1:8000/blogpost/${postId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         })
             .then(response => {
                 if (response.ok) {

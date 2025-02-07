@@ -77,7 +77,7 @@ def edit_blogpost(blogpost_id: int, blogpost: BlogPostEdit, current_user: User =
 
     blogpost_db = db.query(BlogPost).filter(BlogPost.id == blogpost_id).first()
 
-    if not current_user.is_superuser and (not current_user.is_active or current_user.id != blogpost.user_id):
+    if not current_user.is_superuser and (not current_user.is_active or current_user.id != blogpost_db.user_id):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     if not blogpost_id:
