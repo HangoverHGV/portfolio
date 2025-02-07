@@ -82,7 +82,7 @@ async def create_user(user: UserCreate,
     }
 
 
-@router.get("/my/user", tags=["user"], status_code=status.HTTP_200_OK)
+@router.get("/my/user", tags=["user"], status_code=status.HTTP_200_OK, responses=USER_MY_USER_RESPONSE_CONFIG)
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return {
         'id': current_user.id,

@@ -174,6 +174,43 @@ USER_ME_RESPONSE_CONFIG = {
     }
 }
 
+USER_MY_USER_RESPONSE_CONFIG = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "id": 1,
+                    "name": "John Doe",
+                    "email": "johndoe@example.com"
+                }
+            },
+        },
+        "description": "User fetched successfully"
+    },
+    401: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Invalid credentials"
+                }
+            },
+        },
+        "description": "Invalid credentials"
+    },
+    404: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "User not found"
+                }
+            },
+        },
+        "description": "User not found"
+
+    }
+}
+
+
 
 
 SUPERUSER_SECRET_TOKEN = getenv("SUPERUSER_SECRET_TOKEN")
