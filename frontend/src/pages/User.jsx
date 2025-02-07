@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/NavBar";
-import LoginForm from "../components/LoginForm";
+import Dashboard from "../components/Dashboard";
 
 
 export default function Signup() {
@@ -8,8 +8,7 @@ export default function Signup() {
         <>
             <Navbar />
             <div className="container">
-                <h1>Login</h1>
-                <LoginForm />
+                <Dashboard />
             </div>
         </>
     );
