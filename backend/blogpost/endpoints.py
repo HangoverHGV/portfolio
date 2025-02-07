@@ -43,7 +43,6 @@ async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends
         'title': blogpost.title,
         'content': blogpost.content,
         'user_id': blogpost.id,
-        'user_name': blogpost.user.name,
         'created_at': blogpost.created_at,
         'updated_at': blogpost.updated_at
     }
@@ -63,6 +62,7 @@ async def get_blogpost(blogpost_id: int, db: SessionLocal = Depends(get_db)):
         'title': blogpost.title,
         'content': blogpost.content,
         'user_id': blogpost.user_id,
+        'user_name': blogpost.user.name,
         'created_at': blogpost.created_at,
         'updated_at': blogpost.updated_at
     }
