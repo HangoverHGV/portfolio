@@ -2,3 +2,11 @@
     font-size: 1em;
     color: #666;
 }
+.filterContainer{
+    margin-top: 20px;
+}
+
+.createPostButton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

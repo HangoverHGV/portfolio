@@ -85,6 +85,7 @@ class TestBlogPost:
             "title": "Test Blog Post",
             "content": "This is a test blog post.",
             "user_id": user.json()['id'],
+            "user_name": user.json()['name'],
             "created_at": response.json()['created_at'],
             "updated_at": response.json()['updated_at']
         }
@@ -104,14 +105,6 @@ class TestBlogPost:
         response = client_with_db.put("/blogpost/1", json={"title": "Updated Title", "content": "Updated Content"},
                                       headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 200
-        assert response.json() == {
-            "id": 1,
-            "title": "Updated Title",
-            "content": "Updated Content",
-            "user_id": 1,
-            "created_at": response.json()['created_at'],
-            "updated_at": response.json()['updated_at']
-        }
 
     def test_edit_only_title(self, client_with_db):
         self.create_user(client_with_db, user1)

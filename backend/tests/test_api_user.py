@@ -25,6 +25,10 @@ superuser_json = {
     "secret_token": "supersecret"
 }
 
+blogpost1 = {
+    "title": "Test Blog Post",
+    "content": "This is a test blog post."
+}
 
 class TestUser:
 
@@ -40,6 +44,14 @@ class TestUser:
 
     def get_token(self, client_with_db, email, password):
         response = client_with_db.post("/user/token", data={"username": email, "password": password})
+        return response
+
+    def get_all_user_post(self, client_with_db, user_id):
+        response = client_with_db.get(f'/blogpost/?user_id={user_id}')
+        return response
+
+    def create_blogpost(self, client_with_db, blogpost_json, token):
+        response = client_with_db.post("/blogpost/", json=blogpost_json, headers={"Authorization": f"Bearer {token}"})
         return response
 
     # Login Unrestricted Tests
@@ -197,9 +209,11 @@ class TestUser:
     def test_delete_user_me(self, client_with_db):
         self.create_user(client_with_db, user1)
         token = self.get_token(client_with_db, user1["email"], user1["password"]).json()["access_token"]
-
+        self.create_blogpost(client_with_db, blogpost1, token)
         response = client_with_db.delete("/user/1", headers={"Authorization": f"Bearer {token}"})
+        response_blogposts = self.get_all_user_post(client_with_db, 1)
         assert response.status_code == 200
+        assert response_blogposts.json() == []
         assert response.json() == {"detail": "User deleted successfully"}
 
     def test_delete_user_other(self, client_with_db):
@@ -251,4 +265,3 @@ class TestUser:
         response = client_with_db.delete("/user/2", headers={"Authorization": f"Bearer {token}"})
         assert response.status_code == 404
         assert response.json() == {"detail": "User not found"}
-

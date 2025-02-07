@@ -22,7 +22,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
 
-    blog_posts = relationship("BlogPost", back_populates="user")
+    blog_posts = relationship("BlogPost", back_populates="user", cascade="all, delete-orphan")
 
     def verify_password(self, password):
         return pwd_context.verify(password, self.hashed_password)

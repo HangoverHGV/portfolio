@@ -1,0 +1,12 @@
+.buttonContainer {
+    position: absolute;
+    top: 100px;
+    right: 50%;
+}
+.content{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+}

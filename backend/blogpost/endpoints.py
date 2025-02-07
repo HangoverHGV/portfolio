@@ -6,14 +6,18 @@ from blogpost.schema import BlogPostCreate, BlogPostEdit
 from blogpost.config import *
 from datetime import timedelta
 from user.dependencies import authenticate_user, create_access_token, get_current_user
+from typing import Optional
 
 
 router = APIRouter()
 
 # GET all Blogposts
 @router.get("/", tags=["blogpost"], status_code=status.HTTP_200_OK, responses=BLOGPOST_GET_ALL_RESPONSE_CONFIG)
-async def get_all_blogposts(db: SessionLocal = Depends(get_db)):
-    blogposts = db.query(BlogPost).all()
+async def get_all_blogposts(user_id: Optional[int] = None, db: SessionLocal = Depends(get_db)):
+    if user_id:
+        blogposts = db.query(BlogPost).filter(BlogPost.user_id == user_id).all()
+    else:
+        blogposts = db.query(BlogPost).all()
     return [
         {
             'id': blogpost.id,
@@ -48,7 +52,7 @@ async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends
     }
 
 # GET a Blogpost by ID
-@router.get("/{blogpost_id}", tags=["blogpost"], status_code=status.HTTP_200_OK,responses=BLOGPOST_POST_RESPONSE_CONFIG)
+@router.get("/{blogpost_id}", tags=["blogpost"], status_code=status.HTTP_200_OK,responses=BLOGPOST_GET_ONE_RESPONSE_CONFIG)
 async def get_blogpost(blogpost_id: int, db: SessionLocal = Depends(get_db)):
     if not blogpost_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
@@ -62,6 +66,7 @@ async def get_blogpost(blogpost_id: int, db: SessionLocal = Depends(get_db)):
         'title': blogpost.title,
         'content': blogpost.content,
         'user_id': blogpost.user_id,
+        'user_name': blogpost.user.name,
         'created_at': blogpost.created_at,
         'updated_at': blogpost.updated_at
     }
@@ -72,7 +77,7 @@ def edit_blogpost(blogpost_id: int, blogpost: BlogPostEdit, current_user: User =
 
     blogpost_db = db.query(BlogPost).filter(BlogPost.id == blogpost_id).first()
 
-    if not current_user.is_superuser and (not current_user.is_active or current_user.id != blogpost.user_id):
+    if not current_user.is_superuser and (not current_user.is_active or current_user.id != blogpost_db.user_id):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     if not blogpost_id:
