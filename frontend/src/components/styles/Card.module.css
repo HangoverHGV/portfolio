@@ -94,8 +94,22 @@
 }
 
 .container{
-    outline: #61dafb solid 5px;
+    outline: #183D3D solid 5px;
     padding: 10px;
     border-radius: 10px;
 }
-
+.title{
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+.subTitle{
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+.skillContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Add this line to wrap the skills if they overflow */
+}

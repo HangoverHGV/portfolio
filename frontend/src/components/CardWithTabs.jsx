@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import styles from "./styles/Card.module.css";
 
 
+
 export default function CardWithTabs({data}) {
     const [activeTab, setActiveTab] = useState("workexperience");
     const [activeSubTab, setActiveSubTab] = useState(1);
@@ -14,7 +15,9 @@ export default function CardWithTabs({data}) {
                     <div>
                         {data.workexperience.map((item, index) => (
                             <div key={index} className={styles.container}>
-                                <h2 className={styles.aboutmeTitle}>{item.title}</h2>
+                                <h2 className={styles.title}>{item.title}</h2>
+                                <h3 className={styles.subTitle}>{item.startdate} - {item.enddate} in {item.location}</h3>
+                                <h3 className={styles.subTitle}>Company: {item.company}</h3>
                                 <p className={styles.aboutmeContent}>{item.description}</p>
                                 <div className={styles.subTabContainer}>
                                     <div className={styles.subTabButtonContainer}>
@@ -27,6 +30,13 @@ export default function CardWithTabs({data}) {
                                         <h3>{item.projects[activeSubTab - 1].title}</h3>
                                         <p>{item.projects[activeSubTab - 1].description}</p>
                                     </div>
+                                </div>
+                                <div className={styles.subTabContainer}>
+                                    {item.skills.map((skill, index) => (
+                                        <div key={index} className={styles.skillContainer}>
+                                            <h4>{skill}</h4>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         ))}
