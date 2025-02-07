@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Navbar from "../components/NavBar";
+import styles from "../components/styles/Blog.module.css";
 
 export default function Blog() {
     const [blogPosts, setBlogPosts] = useState([]);
@@ -17,8 +18,8 @@ export default function Blog() {
             <div className="container">
                 {blogPosts.map((post, index) => (
                     <div key={index}>
-                        <h2>{post.title}</h2>
-                        <h3>by {post.user_name}</h3>
+                        <h2><a href={`/post/${post.id}`}>{post.title}</a></h2>
+                        <h3 className={styles.username}>by {post.user_name}</h3>
                     </div>
                 ))}
             </div>
