@@ -1,0 +1,111 @@
+{
+  "aboutme": {
+    "title": "About Me",
+    "description": "I am a Python Developer with a strong passion for coding and a desire to learn new technologies. I have a solid understanding of the basics of Python programming. I am comfortable working on medium-sized projects and am able to deliver clean, efficient and well-documented code. I am highly motivated and eager to learn, and I am always looking for opportunities to improve my skills and grow as a developer. I am a team player and have great manager and communication skills which help me to work effectively with a team."
+  },
+  "workexperience": [
+    {
+      "startdate": "2023/07",
+      "enddate": "2024/12",
+      "title": "Working Student",
+      "company": "Robert Bosch S.R.L.",
+      "location": "Cluj-Napoca, Romania",
+      "description": "At Bosch was a great experience, I have learned a lot of things and I have worked on a lot of projects.",
+      "projects": [
+        {
+          "title": "Refactoring internal tools",
+          "description": "Refactoring internal tools to make them more efficient and easier to maintain."
+        },
+        {
+          "title": "Safety and Comfort functions simulator with GUI",
+          "description": "We integrated one internal software that simulates the radar from a car and we integrated with and open source software that presents the car. The open source software was Esmini.\nBesides integrating this two software we also created a scenario generator that parse and create new XOSC and XODR files."
+        },
+        {
+          "title": "ML model for predicting the false activation of the radar",
+          "description": "I created a ML model that predicts the false activation of the radar. I used the data from the radar and already labeled data to train the model."
+        },
+        {
+          "title": "A2L file parser",
+          "description": "I worked in a team of 7 people using the Agile methodology. The parser was already and we had to maintain it, add new featurea, fix bugs and improve the performance."
+        },
+        {
+          "title": "Jira automation watchdog",
+          "description": "This project started as somthing very small but it grow a lot. First requirement was to have a json file with all filters used for finding specific tickets and add a custom comment to them. But after a while the need of adding filters and new comments for diffrent types of situations made the initial solution not suited anymore. So I split the project in three parts. The first part was the watchdog that had suffered minor changes. It shares a container with the backend that is responsible for CRUD operations between frontend and the database written in Python using FastAPI framework. The last part is a frontend written in react that is used to add new filters and comments. After the bot was functional I had to host it somewhere. For that I used an Ubuntu server here i used docker to deply it and configured a nginx server to redirect the traffic to the bot."
+        }
+      ]
+    }
+  ],
+  "freelancing": {
+    "title": null,
+    "startdate": "2023",
+    "enddate": "Present",
+    "description": "As a freelancer I worked on many types of projects",
+    "projects": [
+      {
+        "title": "Automatic PDF to CSV converter",
+        "description": "I created a script that converts a PDF file to a CSV file. The script is able to read the PDF file and extract the data from it and convert to a CSV file.",
+        "image": "client_review.png"
+      },
+      {
+        "title": "Python Logic Puzzles script",
+        "description": "The script solves logic puzzles, mainly mathematical logic puzzles.",
+        "image": null
+      },
+      {
+        "title": "Load-balancer and Keepalived configuration",
+        "description": "I configured a load-balancer and Keepalived for a client. The client had two servers and wanted to balance the traffic between them.",
+        "image": null
+      },
+      {
+        "title": "Django Rest API",
+        "description": "I created a Django Rest API for a client. The API was used to store and retrieve data from a database.",
+        "image": null
+      },
+      {
+        "title": "Fulfilment center automation",
+        "description": "This was my biggest client, I hand to do a lot of things for them, Google Sheets Automation in JS was how it all started, then it started to be a big responsibility for me because i started to work with the database of the warehouse and also with orders and shipments. My main responsability was to move all the data from a management software to another by using API endpoints only. In order to do that I had to map the endpoints and validate the data before sending it to the new software. After this was done nex thing was to create a script that fetches all the shipment labels and sent them to a specific email. After 100+ hours of work for them, sadly the project come to an end. I learned a lot about APIs and their arhitecture.",
+        "image": null
+      }
+    ]
+  },
+  "personalprojects": [
+    {
+      "title": "Python package to have a improved test preview",
+      "description": "I created a Python package that allows you to preview and run the test in a more user-friendly way. The package is available on PyPI and can be installed using pip. The package is called <a href=\"https://pypi.org/project/better-test-preview/\">better-test-preview</a>."
+    },
+    {
+      "title": "Home Lab",
+      "description": "I have a home lab where I test new technologies and create small projects. I installed Proxmox on an old computer and created a few virtual machines. On them I have a VPN connector, an add-free DNS server, Home Assistant and a Kalilinux machine to test security."
+    }
+  ],
+  "education": [
+    {
+      "startdate": "2018",
+      "enddate": "2023",
+      "title": "Bachelor's degree in Electrical Engineering",
+      "school": "Technical University of Cluj-Napoca",
+      "location": "Cluj-Napoca, Romania",
+      "description": "I studied Electrical Engineering at the Technical University of Cluj-Napoca. I learned about electrical circuits, electronics, programming, and other related subjects.\nGraduation project: Smart Indoor Positioning System using BLE technology."
+    }
+  ],
+  "skills": [
+    "Python",
+    "Docker",
+    "FastAPI",
+    "React",
+    "Nginx",
+    "Jira",
+    "Git",
+    "C",
+    "C++",
+    "Matlab",
+    "Arduino",
+    "Raspberry Pi",
+    "Advanced Mathematics",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "C#",
+    "Algorithms"
+  ]
+}

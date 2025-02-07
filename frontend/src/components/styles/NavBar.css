@@ -1,0 +1,48 @@
+.navbar {
+    background-color: #040D12;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Baskerville', serif;
+    font-size: 1.25em;
+}
+
+.navbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(106, 214, 173, 0.3), rgba(255, 255, 255, 0));
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar li {
+    position: relative;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s, border-radius 0.3s;
+}
+
+.navbar a:hover {
+    background-color: rgb(147, 177, 166);
+    border-radius: 10px;
+}

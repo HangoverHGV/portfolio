@@ -1,0 +1,144 @@
+
+.aboutmeContainer {
+    margin-top: 20px;
+    background-color: #5C8374;
+    padding: 20px;
+    border-radius: 10px;
+    color: #333;
+}
+
+.aboutmeTitle {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.aboutmeContent {
+    font-size: 1.2em;
+    line-height: 1.5;
+}
+
+.tabContainer {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.tabContainer button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #5C8374;
+    color: black;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.tabContainer button:hover {
+    background-color: #93B1A6;
+}
+
+.tabContainer button:focus {
+    outline: none;
+    background-color: #605c5c;
+}
+
+.tabContent {
+    padding: 20px;
+    background-color: #5C8374;
+    color: #333;
+    border-radius: 10px;
+
+}
+.subTabContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.subTabButtonContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.subTabButtonContainer button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #183D3D;
+    color: #93B1A6;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.subTabButtonContainer button:hover {
+    background-color: #93B1A6;
+}
+
+.subTabButtonContainer button:focus {
+    outline: none;
+    background-color: #605c5c;
+}
+
+.subTabContent {
+    margin-top: 20px;
+    text-align: left;
+    width: 100%;
+    background-color: #93B1A6;
+    border-radius: 10px;
+    padding-left: 10px;
+}
+
+.container{
+    outline: #183D3D solid 5px;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.title{
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+.subTitle{
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+.skillContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.skillContainer h4 {
+    font-size: 1em;
+    margin-bottom: 10px;
+    background-color: #183D3D;
+    padding: 5px 10px;
+    color: #93B1A6;
+    border-radius: 10px;
+}
+
+.reviewImg{
+    width : 90%;
+    margin: 10px;
+}
+
+.skillsGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+
+.skillItem {
+    background-color: #93B1A6;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
