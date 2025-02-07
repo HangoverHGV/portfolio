@@ -37,32 +37,32 @@
   ],
   "freelancing": {
     "title": null,
-    "start-date": "2023",
-    "end-date": "Present",
-    "short-description": "As a freelancer I worked on many types of projects",
+    "startdate": "2023",
+    "enddate": "Present",
+    "description": "As a freelancer I worked on many types of projects",
     "projects": [
       {
-        "name": "Automatic PDF to CSV converter",
+        "title": "Automatic PDF to CSV converter",
         "description": "I created a script that converts a PDF file to a CSV file. The script is able to read the PDF file and extract the data from it and convert to a CSV file.",
         "image": "client_review.png"
       },
       {
-        "name": "Python Logic Puzzles script",
+        "title": "Python Logic Puzzles script",
         "description": "The script solves logic puzzles, mainly mathematical logic puzzles.",
         "image": null
       },
       {
-        "name": "Load-balancer and Keepalived configuration",
+        "title": "Load-balancer and Keepalived configuration",
         "description": "I configured a load-balancer and Keepalived for a client. The client had two servers and wanted to balance the traffic between them.",
         "image": null
       },
       {
-        "name": "Django Rest API",
+        "title": "Django Rest API",
         "description": "I created a Django Rest API for a client. The API was used to store and retrieve data from a database.",
         "image": null
       },
       {
-        "name": "Fulfilment center automation",
+        "title": "Fulfilment center automation",
         "description": "This was my biggest client, I hand to do a lot of things for them, Google Sheets Automation in JS was how it all started, then it started to be a big responsibility for me because i started to work with the database of the warehouse and also with orders and shipments. My main responsability was to move all the data from a management software to another by using API endpoints only. In order to do that I had to map the endpoints and validate the data before sending it to the new software. After this was done nex thing was to create a script that fetches all the shipment labels and sent them to a specific email. After 100+ hours of work for them, sadly the project come to an end. I learned a lot about APIs and their arhitecture.",
         "image": null
       }
@@ -70,32 +70,21 @@
   },
   "personalprojects": [
     {
-      "start-date": null,
-      "end-date": null,
-      "company": null,
-      "location": null,
-      "projects": null,
       "title": "Python package to have a improved test preview",
       "description": "I created a Python package that allows you to preview and run the test in a more user-friendly way. The package is available on PyPI and can be installed using pip. The package is called <a href=\"https://pypi.org/project/better-test-preview/\">better-test-preview</a>."
     },
     {
-      "start-date": null,
-      "end-date": null,
-      "company": null,
-      "location": null,
-      "projects": null,
       "title": "Home Lab",
       "description": "I have a home lab where I test new technologies and create small projects. I installed Proxmox on an old computer and created a few virtual machines. On them I have a VPN connector, an add-free DNS server, Home Assistant and a Kalilinux machine to test security."
     }
   ],
   "education": [
     {
-      "start-date": "2018",
-      "end-date": "2023",
+      "startdate": "2018",
+      "enddate": "2023",
       "title": "Bachelor's degree in Electrical Engineering",
       "school": "Technical University of Cluj-Napoca",
       "location": "Cluj-Napoca, Romania",
-      "projects": null,
       "description": "I studied Electrical Engineering at the Technical University of Cluj-Napoca. I learned about electrical circuits, electronics, programming, and other related subjects.\nGraduation project: Smart Indoor Positioning System using BLE technology."
     }
   ],
