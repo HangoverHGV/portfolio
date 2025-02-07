@@ -130,3 +130,15 @@
     margin: 10px;
 }
 
+.skillsGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+
+.skillItem {
+    background-color: #93B1A6;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}

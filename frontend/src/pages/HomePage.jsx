@@ -12,7 +12,7 @@ export default function HomePage() {
         <div className="container">
             <Card data={data.aboutme}/>
             <CardWithTabs data={data}/>
-
+            <Card data={data.skills}/>
         </div>
     </>
 }
