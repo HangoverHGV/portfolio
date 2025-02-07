@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/NavBar";
-import SignupForm from "../components/SignupForm";
+import LoginForm from "../components/LoginForm";
+
 
 export default function Signup() {
     return (
@@ -8,7 +9,7 @@ export default function Signup() {
             <Navbar />
             <div className="container">
                 <h1>Signup</h1>
-                <SignupForm />
+                <LoginForm />
             </div>
         </>
     );
