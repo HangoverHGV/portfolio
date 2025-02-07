@@ -30,7 +30,7 @@ async def get_all_blogposts(db: SessionLocal = Depends(get_db)):
 @router.post("/", tags=["blogpost"], status_code=status.HTTP_201_CREATED, responses=BLOGPOST_POST_RESPONSE_CONFIG)
 async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends(get_current_user), db=Depends(get_db)):
     if not current_user.is_superuser and not current_user.is_active:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated or not authorized")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     blogpost = BlogPost(**blogpost.model_dump(), user_id=current_user.id)
     db.add(blogpost)
@@ -71,7 +71,7 @@ def edit_blogpost(blogpost_id: int, blogpost: BlogPostEdit, current_user: User =
 
     blogpost_db = db.query(BlogPost).filter(BlogPost.id == blogpost_id).first()
 
-    if not current_user.is_superuser and not current_user.is_active or current_user.id != blogpost_db.user_id:
+    if not current_user.is_superuser and (not current_user.is_active or current_user.id != blogpost.user_id):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     if not blogpost_id:
@@ -100,7 +100,7 @@ def edit_blogpost(blogpost_id: int, blogpost: BlogPostEdit, current_user: User =
 async def delete_blogpost(blogpost_id: int, current_user: User = Depends(get_current_user), db=Depends(get_db)):
     blogpost = db.query(BlogPost).filter(BlogPost.id == blogpost_id).first()
 
-    if not current_user.is_superuser and not current_user.is_active or current_user.id != blogpost.user_id:
+    if not current_user.is_superuser and (not current_user.is_active or current_user.id != blogpost.user_id):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     if not blogpost_id:
