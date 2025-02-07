@@ -7,10 +7,12 @@ import CardWithTabs from "../components/CardWithTabs";
 export default function HomePage() {
 
 
-    return <div className="container">
+    return <>
         <Navbar/>
-        <Card data={data.aboutme}/>
-        <CardWithTabs data={data}/>
-    </div>
+        <div className="container">
+            <Card data={data.aboutme}/>
+            <CardWithTabs data={data}/>
+        </div>
+    </>
 }
 
