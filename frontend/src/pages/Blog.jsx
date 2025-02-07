@@ -18,7 +18,7 @@ import React, { useState, useEffect } from "react";
                     {blogPosts.map((post, index) => (
                         <div key={index}>
                             <h2>{post.title}</h2>
-                            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                            <h3></h3>
                         </div>
                     ))}
                 </div>
