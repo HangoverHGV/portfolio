@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import RichTextEditor from "../components/RichTextEditor";
+import Navbar from "../components/NavBar";
 
 export default function EditPost() {
     const {postId} = useParams();
@@ -52,11 +53,13 @@ export default function EditPost() {
         return <div>Loading...</div>;
     }
 
-    return (
+    return (<>
+            <Navbar/>
         <div className="container">
             <h1>Edit Post</h1>
             <RichTextEditor value={content} onChange={setContent}/>
             <button onClick={handleSave}>Save</button>
         </div>
+        </>
     );
 }
