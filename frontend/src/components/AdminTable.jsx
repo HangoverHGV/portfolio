@@ -35,41 +35,42 @@ export default function AdminTable() {
 
     const handleDeleteUser = (userId) => {
         const token = localStorage.getItem("access_token");
-        console.log("Deleting user with ID:", userId);
-        console.log("Token:", token);
-
-        fetch(`http://127.0.0.1:8000/user/${userId}`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    setAllUsers(allUsers.filter(user => user.id !== userId));
-                } else {
-                    console.error("Error deleting user:", response.statusText);
-                    alert("Error deleting user");
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            fetch(`http://127.0.0.1:8000/user/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
             })
-            .catch(error => console.error("Error deleting user:", error));
+                .then(response => {
+                    if (response.ok) {
+                        setAllUsers(allUsers.filter(user => user.id !== userId));
+                    } else {
+                        console.error("Error deleting user:", response.statusText);
+                        alert("Error deleting user");
+                    }
+                })
+                .catch(error => console.error("Error deleting user:", error));
+        }
     };
 
     const handleDeletePost = (postId) => {
-        fetch(`http://127.0.0.1:8000/blogpost/${postId}`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    setAllPosts(allPosts.filter(post => post.id !== postId));
-                } else {
-                    console.error("Error deleting post");
+        if (window.confirm("Are you sure you want to delete this post?")) {
+            fetch(`http://127.0.0.1:8000/blogpost/${postId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
             })
-            .catch(error => console.error("Error deleting post:", error));
+                .then(response => {
+                    if (response.ok) {
+                        setAllPosts(allPosts.filter(post => post.id !== postId));
+                    } else {
+                        console.error("Error deleting post");
+                    }
+                })
+                .catch(error => console.error("Error deleting post:", error));
+        }
     };
 
     return (
