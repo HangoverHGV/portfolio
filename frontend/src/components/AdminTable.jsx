@@ -106,7 +106,6 @@ export default function AdminTable() {
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
-                    <th>Content</th>
                     <th>User ID</th>
                     <th>User Name</th>
                     <th>Actions</th>
@@ -119,7 +118,6 @@ export default function AdminTable() {
                         <td>
                             <Link to={`/post/${post.id}`}>{post.title}</Link>
                         </td>
-                        <td>{post.content}</td>
                         <td>{post.user_id}</td>
                         <td>{post.user_name}</td>
                         <td>

@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import User from "./pages/User";
 import EditPost from "./pages/EditPost";
+import UserFromAdmin from "./pages/UserFromAdmin";
 
 const router = createBrowserRouter([
     {path: "/" , element: <HomePage/>},
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
     {path: "/login" , element: <Login/>},
     {path: "/user" , element: <User/>},
     {path: "/edit/:postId" , element: <EditPost/>},
+    {path: "/user/:userId" , element: <UserFromAdmin/>},
     ]);
 
 function App() {
