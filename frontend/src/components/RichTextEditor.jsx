@@ -14,7 +14,16 @@ export default function RichTextEditor({ value, onChange }) {
             }
         }
     }, [value]);
-
+        const modules = {
+        toolbar: [
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['bold', 'italic', 'underline'],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'align': [] }],
+            ['link', 'image'],
+            ['clean']
+        ]
+    };
     return (
         <div>
             <div className={styles.editorContainer}>
@@ -23,6 +32,7 @@ export default function RichTextEditor({ value, onChange }) {
                     theme="snow"
                     value={value}
                     onChange={onChange}
+                    modules={modules}
                     className={styles.editor}
                 />
             </div>
