@@ -44,7 +44,7 @@ import React, { useState, useEffect } from "react";
                                             </li>
                                             {isLoggedIn ? (
                                                 <li>
-                                                    <a>Welcome, {username}</a>
+                                                    <a href="/user">Welcome, {username}</a>
                                                 </li>
                                             ) : (
                                                 <>
