@@ -20,6 +20,7 @@ async def get_all_blogposts(db: SessionLocal = Depends(get_db)):
             'title': blogpost.title,
             'content': blogpost.content,
             'user_id': blogpost.user_id,
+            'user_name': blogpost.user.name,
             'created_at': blogpost.created_at,
             'updated_at': blogpost.updated_at
         }
