@@ -6,14 +6,18 @@ from blogpost.schema import BlogPostCreate, BlogPostEdit
 from blogpost.config import *
 from datetime import timedelta
 from user.dependencies import authenticate_user, create_access_token, get_current_user
+from typing import Optional
 
 
 router = APIRouter()
 
 # GET all Blogposts
 @router.get("/", tags=["blogpost"], status_code=status.HTTP_200_OK, responses=BLOGPOST_GET_ALL_RESPONSE_CONFIG)
-async def get_all_blogposts(db: SessionLocal = Depends(get_db)):
-    blogposts = db.query(BlogPost).all()
+async def get_all_blogposts(user_id: Optional[int] = None, db: SessionLocal = Depends(get_db)):
+    if user_id:
+        blogposts = db.query(BlogPost).filter(BlogPost.user_id == user_id).all()
+    else:
+        blogposts = db.query(BlogPost).all()
     return [
         {
             'id': blogpost.id,
