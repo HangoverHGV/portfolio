@@ -3,4 +3,11 @@
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 10px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.editor {
+    height: 90%;
 }
