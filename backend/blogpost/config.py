@@ -8,6 +8,7 @@ BLOGPOST_GET_ALL_RESPONSE_CONFIG = {
                         "title": "Blog Post 1",
                         "content": "Content of blog post 1",
                         "user_id": 1,
+                        "user_name": "John Doe",
                         "created_at": "2021-01-01T00:00:00",
                         "updated_at": "2021-01-01T00:00:00"
 
@@ -17,6 +18,7 @@ BLOGPOST_GET_ALL_RESPONSE_CONFIG = {
                         "title": "Blog Post 2",
                         "content": "Content of blog post 2",
                         "user_id": 2,
+                        "user_name": "Jane Doe",
                         "created_at": "2021-01-01T00:00:00",
                         "updated_at": "2021-01-01T00:00:00"
                     }
@@ -64,6 +66,7 @@ BLOGPOST_POST_RESPONSE_CONFIG = {
                     "title": "Blog Post 1",
                     "content": "Content of blog post 1",
                     "user_id": 1,
+                    "user_name": "John Doe",
                     "created_at": "2021-01-01T00:00:00",
                     "updated_at": "2021-01-01T00:00:00"
                 }

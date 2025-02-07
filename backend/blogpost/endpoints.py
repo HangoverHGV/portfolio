@@ -43,6 +43,7 @@ async def create_blogpost(blogpost: BlogPostCreate, current_user: User = Depends
         'title': blogpost.title,
         'content': blogpost.content,
         'user_id': blogpost.id,
+        'user_name': blogpost.user.name,
         'created_at': blogpost.created_at,
         'updated_at': blogpost.updated_at
     }

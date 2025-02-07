@@ -1,30 +1,96 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import Navbar from "../components/NavBar";
+                                    import { useParams, useNavigate } from "react-router-dom";
+                                    import Navbar from "../components/NavBar";
 
-export default function Post() {
-    const { postId } = useParams();
-    const [post, setPost] = useState(null);
+                                    export default function Post() {
+                                        const { postId } = useParams();
+                                        const [post, setPost] = useState(null);
+                                        const [currentUser, setCurrentUser] = useState(null);
+                                        const navigate = useNavigate();
 
-    useEffect(() => {
-        fetch(`http://127.0.0.1:8000/blogpost/${postId}`)
-            .then(response => response.json())
-            .then(data => setPost(data))
-            .catch(error => console.error("Error fetching post:", error));
-    }, [postId]);
+                                        useEffect(() => {
+                                            const fetchPost = async () => {
+                                                try {
+                                                    const response = await fetch(`http://127.0.0.1:8000/blogpost/${postId}`);
+                                                    const data = await response.json();
+                                                    setPost(data);
+                                                    console.log(data);
+                                                } catch (error) {
+                                                    console.error("Error fetching post:", error);
+                                                }
+                                            };
 
-    if (!post) {
-        return <div>Loading...</div>;
-    }
+                                            const fetchCurrentUser = async () => {
+                                                const token = localStorage.getItem("access_token");
+                                                if (token) {
+                                                    try {
+                                                        const response = await fetch("http://127.0.0.1:8000/user/my/user", {
+                                                            method: "GET",
+                                                            headers: {
+                                                                "Authorization": `Bearer ${token}`
+                                                            }
+                                                        });
+                                                        if (response.status === 200) {
+                                                            const data = await response.json();
+                                                            setCurrentUser(data);
+                                                        }
+                                                    } catch (error) {
+                                                        console.error("Error fetching current user:", error);
+                                                    }
+                                                }
+                                            };
 
-    return (
-        <>
-            <Navbar />
-            <div className="container">
-                <h1>{post.title}</h1>
-                <h3>by {post.user_name}</h3>
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
-            </div>
-        </>
-    );
-}
+                                            fetchPost();
+                                            fetchCurrentUser();
+                                        }, [postId]);
+
+                                        const handleDelete = async () => {
+                                            const token = localStorage.getItem("access_token");
+                                            if (token) {
+                                                try {
+                                                    const response = await fetch(`http://127.0.0.1:8000/blogpost/${postId}`, {
+                                                        method: "DELETE",
+                                                        headers: {
+                                                            "Authorization": `Bearer ${token}`
+                                                        }
+                                                    });
+                                                    if (response.status === 204) {
+                                                        alert("Post deleted successfully");
+                                                        navigate("/blog");
+                                                    } else {
+                                                        alert("Failed to delete post");
+                                                    }
+                                                } catch (error) {
+                                                    console.error("Error deleting post:", error);
+                                                    alert("Error deleting post");
+                                                }
+                                            }
+                                        };
+
+                                        if (!post) {
+                                            return <div>Loading...</div>;
+                                        }
+
+                                        const isUserPost = currentUser && post.user_id === currentUser.id;
+
+                                        return (
+                                            <>
+                                                <Navbar />
+                                                <div className="container">
+                                                    <h1>{post.title}</h1>
+                                                    <h3>by {post.user_name}</h3>
+                                                    <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                                                    {isUserPost ? (
+                                                        <div>
+                                                            <button onClick={() => navigate(`/edit/${postId}`)}>Edit</button>
+                                                            <button onClick={handleDelete}>Delete</button>
+                                                        </div>
+                                                    ) : (
+                                                        <div>
+                                                            <p>This post is read-only.</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </>
+                                        );
+                                    }
