@@ -9,7 +9,7 @@ export default function AdminTable() {
 
     useEffect(() => {
         // Fetch the token from local storage or any other secure place
-        const storedToken = localStorage.getItem("token");
+        const storedToken = localStorage.getItem("access_token");
         setToken(storedToken);
 
         // Fetch all users
@@ -34,6 +34,10 @@ export default function AdminTable() {
     }, []);
 
     const handleDeleteUser = (userId) => {
+        const token = localStorage.getItem("access_token");
+        console.log("Deleting user with ID:", userId);
+        console.log("Token:", token);
+
         fetch(`http://127.0.0.1:8000/user/${userId}`, {
             method: "DELETE",
             headers: {
@@ -44,7 +48,8 @@ export default function AdminTable() {
                 if (response.ok) {
                     setAllUsers(allUsers.filter(user => user.id !== userId));
                 } else {
-                    console.error("Error deleting user");
+                    console.error("Error deleting user:", response.statusText);
+                    alert("Error deleting user");
                 }
             })
             .catch(error => console.error("Error deleting user:", error));

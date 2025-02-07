@@ -24,6 +24,7 @@ export default function Dashboard() {
                         const data = await response.json();
                         setUserData({...data, password: ""});
                         setUserId(data.id);
+                        console.log(data);
                         setIsSuperUser(data.is_superuser); // Assuming the response contains is_superuser field
                     } else {
                         navigate("/login");
