@@ -86,7 +86,7 @@ export default function CardWithTabs({data}) {
                                         className={activeSubTab === index + 1 ? styles.active : ""}
                                         onClick={() => setActiveSubTab(index + 1)}
                                     >
-                                        {project.title}
+                                        {project["title"]}
                                     </button>
                                 ))}
                             </div>
