@@ -81,7 +81,8 @@ export default function Dashboard() {
         <div className={styles.dashboard}>
             <h1>Welcome, {userData.name}</h1>
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className={styles.formGroup}>
+
                     <label>Name:</label>
                     <input
                         type="text"
@@ -89,8 +90,7 @@ export default function Dashboard() {
                         value={userData.name}
                         onChange={handleChange}
                     />
-                </div>
-                <div>
+
                     <label>Email:</label>
                     <input
                         type="email"
@@ -98,8 +98,7 @@ export default function Dashboard() {
                         value={userData.email}
                         onChange={handleChange}
                     />
-                </div>
-                <div>
+
                     <label>Password:</label>
                     <input
                         type="password"
@@ -108,7 +107,7 @@ export default function Dashboard() {
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit">Update</button>
+                <button className={styles.submitButton} type="submit">Update</button>
             </form>
 
             {isSuperUser && <AdminTable/>}

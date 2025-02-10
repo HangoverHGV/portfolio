@@ -76,7 +76,7 @@ export default function AdminTable() {
     return (
         <div>
             <h2>All Users</h2>
-            <table className={styles.table}>
+            <table>
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -102,7 +102,7 @@ export default function AdminTable() {
             </table>
 
             <h2>All Posts</h2>
-            <table className={styles.table}>
+            <table>
                 <thead>
                 <tr>
                     <th>ID</th>

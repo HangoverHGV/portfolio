@@ -1,10 +1,29 @@
-.table{
+
+button{
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #183D3D;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: #ffffff;
+    color: #183D3D;
+}
+
+table{
     width: 100%;
     border-collapse: collapse;
     margin: 0 auto;
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+td, th{
+    padding: 10px;
+    text-align: center;
 }
