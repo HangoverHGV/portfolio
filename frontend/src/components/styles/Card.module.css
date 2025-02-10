@@ -40,7 +40,7 @@
 }
 
 .tabContainer button.active {
-    background-color: #e1c4a6;
+    background-color: #F9F9F9;
 }
 
 .tabContent {
@@ -132,13 +132,18 @@
 
 .skillsGrid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgb(147,177,166);
+    position: relative;
 }
 
+
 .skillItem {
-    background-color: #93B1A6;
-    padding: 20px;
+    background: rgb(147,177,166);
+    background: radial-gradient(circle, rgba(147,177,166,1) 0%, rgba(24,61,61,1) 100%);padding: 10px;
+    border-radius: 4px;
     text-align: center;
-    border-radius: 5px;
 }
