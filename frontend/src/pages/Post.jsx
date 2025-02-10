@@ -77,8 +77,8 @@ export default function Post() {
         <>
             <Navbar/>
             <div className="container">
-                <h1>{post.title}</h1>
-                <h3>by {post.user_name}</h3>
+                <h1 className={styles.blogTitle}>{post.title}</h1>
+                <h3 className={styles.username}>by {post.user_name}</h3>
                 <div className={styles.content} dangerouslySetInnerHTML={{__html: post.content}}/>
                 {isUserPost ? (
                     <div className={styles.buttonContainer}>
