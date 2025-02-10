@@ -43,6 +43,8 @@ export default function SignupForm() {
 
     return (
         <form onSubmit={handleSubmit} className={styles.signupForm}>
+                <h1 className="sigupText">Sign up</h1>
+
             <div className={styles.formGroup}>
                 <label>Name:</label>
                 <input

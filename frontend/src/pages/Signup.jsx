@@ -7,7 +7,6 @@ export default function Signup() {
         <>
             <Navbar />
             <div className="container">
-                <h1>Signup</h1>
                 <SignupForm />
             </div>
         </>

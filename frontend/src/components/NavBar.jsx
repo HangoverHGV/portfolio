@@ -55,7 +55,7 @@ export default function Navbar() {
                         <li>
                             <a href="/user">{username}</a>
                         </li>
-                        <li>
+                        <li className="logout">
                             <a onClick={handleLogout}>Logout</a>
                         </li>
                     </>
@@ -65,7 +65,7 @@ export default function Navbar() {
                             <a href="/login">Login</a>
                         </li>
                         <li>
-                            <a href="/signup">Signup</a>
+                            <a  href="/signup">Signup</a>
                         </li>
                     </>
                 )}
