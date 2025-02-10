@@ -39,9 +39,11 @@ export default function CreatePost() {
             <Navbar/>
             <div className="container">
                 <div className={styles.createPostContainer}>
-                    <h1>Create Blog Post</h1>
+
+                <h1 className={styles.glow}>Create Blog Post</h1>
+
                     <form onSubmit={handleSubmit}>
-                        <div>
+                        <div className={styles.inputContainer}>
                             <label>Title:</label>
                             <input
                                 type="text"
@@ -50,12 +52,12 @@ export default function CreatePost() {
                                 required
                             />
                         </div>
-                        <div>
+                        <div className={styles.inputContainer}>
                             <label>Content:</label>
                             <RichTextEditor value={content} onChange={setContent}/>
                         </div>
                         {error && <p style={{color: "red"}}>{error}</p>}
-                        <button type="submit">Create</button>
+                        <button className={styles.submitButton} type="submit">Create</button>
                     </form>
                 </div>
             </div>
