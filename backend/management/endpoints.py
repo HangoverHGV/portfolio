@@ -96,13 +96,14 @@ def delete_schedule(schedule_id: int, current_user: User = Depends(get_current_u
 
 
 @router.get("/resources", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_RESOURCES)
-def get_all_resources(current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
-    if current_user.is_superuser:
-        resources = db.query(Resource).all()
-    elif current_user.is_active:
-        resources = db.query(Resource).filter(Resource.user_id == current_user.id).all()
-    else:
+def get_all_resources(schedule_id: Optional[int] = None, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    if not current_user.is_superuser and not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if schedule_id:
+        resources = db.query(Resource).filter(Resource.schedule_id == schedule_id).all()
+    else:
+        resources = db.query(Resource).all()
 
     return [
         {

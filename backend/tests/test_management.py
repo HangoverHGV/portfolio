@@ -163,7 +163,7 @@ class TestManagement:
         assert response.json() == {"detail": "Schedule deleted successfully"}
 
         response = client_with_db.delete("/management/schedules/2",
-                                            headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+                                         headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 404
         assert response.json() == {"detail": "Schedule not found"}
 
@@ -177,6 +177,38 @@ class TestManagement:
         response = client_with_db.get("/management/resources",
                                       headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 200
+        # Get all resources of a schedule
+        self.create_schedule(client_with_db, schedule1, token)
+        resource1['schedule_id'] = 1
+        resource2['schedule_id'] = 1
+        self.create_resource(client_with_db, resource1, token)
+        self.create_resource(client_with_db, resource2, token)
+
+        response = client_with_db.get("/management/resources?schedule_id=1",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == [
+            {
+                "id": 1,
+                "name": "Test Resource1",
+                "datetime_started": "2021-01-01T00:00:00",
+                "datetime_ended": "2021-01-01T01:00:00",
+                "schedule_id": 1,
+                "user_id": 1,
+                "created_at": response.json()[0]['created_at'],
+                "updated_at": response.json()[0]['updated_at']
+            },
+            {
+                "id": 2,
+                "name": "Test Resource2",
+                "datetime_started": "2021-01-01T02:00:00",
+                "datetime_ended": "2021-01-01T03:00:00",
+                "schedule_id": 1,
+                "user_id": 1,
+                "created_at": response.json()[1]['created_at'],
+                "updated_at": response.json()[1]['updated_at']
+            }
+        ]
 
     def test_create_resource(self, client_with_db):
         response = client_with_db.post("/management/resources", json=resource1)
@@ -260,13 +292,13 @@ class TestManagement:
         assert response.json() == {"detail": "Schedule or Resource not found"}
 
         response = client_with_db.put("/management/resources/1", json={"name": "New Name", "schedule_id": 2},
-                                        headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 404
         assert response.json() == {"detail": "Schedule or Resource not found"}
 
         sch2 = self.create_schedule(client_with_db, schedule2, token)
         response = client_with_db.put("/management/resources/1", json={"name": "New Name", "schedule_id": 2},
-                                        headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 200
         assert response.json() == {
             "id": 1,
@@ -294,9 +326,6 @@ class TestManagement:
         assert response.json() == {"detail": "Resource deleted successfully"}
 
         response = client_with_db.delete("/management/resources/2",
-                                            headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+                                         headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 404
         assert response.json() == {"detail": "Resource not found"}
-
-
-
