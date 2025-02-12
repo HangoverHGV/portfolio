@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
+import CreateEmployPopup from "./CreateEmployPopup";
 import "./styles/Resourcetable.css";
 
-export default function ResourceTable({ scheduleId }) {
+export default function ResourceTable({scheduleId}) {
     const [data, setData] = useState([]);
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +30,7 @@ export default function ResourceTable({ scheduleId }) {
     }, [scheduleId]);
 
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    const daysArray = Array.from({length: daysInMonth}, (_, i) => i + 1);
 
     const getResourceForDay = (resources, day) => {
         return resources.filter(resource => {
@@ -47,36 +49,58 @@ export default function ResourceTable({ scheduleId }) {
         }
     };
 
+    const handleOpenPopup = () => {
+        setIsPopupOpen(true);
+    };
+
+    const handleClosePopup = () => {
+        setIsPopupOpen(false);
+    };
+
+    const handleEmployCreated = (newEmploy) => {
+        setData([...data, newEmploy]);
+    };
+
     return (
         <>
-            <div className="resourceTable">
+            <div>
+                <button onClick={handleOpenPopup}>Add Employ</button>
+                {isPopupOpen && (
+                    <CreateEmployPopup
+                        onClose={handleClosePopup}
+                        onEmployCreated={handleEmployCreated}
+                        scheduleId={scheduleId}
+                    />
+                )}
+            </div>
+            <div className="resourceTable content">
                 <div className="monthChange">
                     <button onClick={() => handleMonthChange("prev")}>Previous Month</button>
-                    <span>{new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}</span>
+                    <span>{new Date(currentYear, currentMonth).toLocaleString('default', {month: 'long'})} {currentYear}</span>
                     <button onClick={() => handleMonthChange("next")}>Next Month</button>
                 </div>
                 <table>
                     <thead>
-                        <tr>
-                            <th>Employee Name</th>
-                            {daysArray.map(day => (
-                                <th key={day}>{day}</th>
-                            ))}
-                        </tr>
+                    <tr>
+                        <th>Employee Name</th>
+                        {daysArray.map(day => (
+                            <th key={day}>{day}</th>
+                        ))}
+                    </tr>
                     </thead>
                     <tbody>
-                        {data.map(employ => (
-                            <tr key={employ.id}>
-                                <td>{employ.name}</td>
-                                {daysArray.map(day => (
-                                    <td key={day}>
-                                        {getResourceForDay(employ.resources, day).map(resource => (
-                                            <div key={resource.id}>{resource.name}</div>
-                                        ))}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
+                    {data.map(employ => (
+                        <tr key={employ.id}>
+                            <td>{employ.name}</td>
+                            {daysArray.map(day => (
+                                <td key={day}>
+                                    {getResourceForDay(employ.resources, day).map(resource => (
+                                        <div key={resource.id}>{resource.name}</div>
+                                    ))}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>
