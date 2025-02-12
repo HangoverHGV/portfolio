@@ -1,13 +1,22 @@
 .resourceTable{
     width: 100%;
-    border-collapse: collapse;
     margin-top: 20px;
     margin-bottom: 20px;
+    overflow-x: auto;
+    position: relative;
 }
+
+.resourceTable th, .resourceTable td {
+    border: 1px solid white; /* Add this line to show the lines and make them white */
+    padding: 20px;
+    text-align: left;
+}
+
 .monthChange{
-    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 20px;
-    text-align: center;
 }
 .monthChange button{
     margin-right: 10px;
