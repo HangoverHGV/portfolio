@@ -1,5 +1,5 @@
 from fastapi import (APIRouter, Depends, HTTPException, status)
-from user.models import Resource, Schedule, User
+from user.models import Resource, Schedule, User, Employ, schedule_employ_association
 from configs import get_db, SessionLocal
 from management.schema import ScheduleCreate, ScheduleEdit, ResourceCreate, ResourceEdit
 from datetime import timedelta, datetime
@@ -225,3 +225,25 @@ def delete_resource(resource_id: int, current_user: User = Depends(get_current_u
     db.delete(resource)
     db.commit()
     return {"detail": "Resource deleted successfully"}
+
+@router.get("/employ", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_EMPLOY)
+def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    if not current_user.is_superuser and not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if schedule_id:
+        employs = db.query(Employ).join(schedule_employ_association).filter(
+            schedule_employ_association.c.schedule_id == schedule_id).all()
+    else:
+        employs = db.query(Employ).filter(Employ.user_id == current_user.id).all()
+    return [
+        {
+            'id': employ.id,
+            'name': employ.name,
+            'schedule_id': employ.schedule_id,
+            'resources': [resource.id for resource in employ.resources]
+        }
+        for employ in employs
+    ]
+
+

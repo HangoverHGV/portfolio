@@ -233,3 +233,36 @@ DELETE_RESOURCE = {
         "description": "Resource not found"
     },
 }
+
+GET_ALL_EMPLOY = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": [
+                    {
+                        "id": 1,
+                        "name": "Employ 1",
+                        "schedule_id": 1,
+                        "resources":[1, 2 ,3],
+                        "created_at": "2021-01-01T00:00:00",
+                        "updated_at": "2021-01-01T00:00:00"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Employ 2",
+                        "schedule_id": 2,
+                        "resources":[4, 5 ,6],
+                        "created_at": "2021-01-01T00:00:00",
+                        "updated_at": "2021-01-01T00:00:00"
+                    }
+                ]
+            },
+        },
+        "description": "Employs fetched successfully"
+    },
+    401:{
+        "description": "Not authenticated"
+    }
+}
+
+
