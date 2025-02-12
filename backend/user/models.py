@@ -86,6 +86,7 @@ class Resource(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    resource_type = Column(String, index=True)
     datetime_started = Column(DateTime)
     datetime_ended = Column(DateTime)
 

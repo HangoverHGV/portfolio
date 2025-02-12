@@ -14,6 +14,8 @@ class ResourceCreate(BaseModel):
     datetime_started: str
     datetime_ended: str
     schedule_id: int
+    employ_id: int
+    resource_type: str
 
 class ResourceEdit(BaseModel):
     name: Optional[str] = None

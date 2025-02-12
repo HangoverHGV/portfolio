@@ -267,6 +267,7 @@ def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depe
 
     return [
         {
+            'id': employ.id,
             'name': employ.name,
             'user_id': employ.user_id,
             'resources': [resources for resources in get_employ_resource(employ.id, current_user, db)]

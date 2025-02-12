@@ -1,12 +1,15 @@
 import React, {useState, useEffect} from "react";
 import CreateEmployPopup from "./CreateEmployPopup";
+import CreateResourcePopup from "./CreateResourcePopup";
 import "./styles/Resourcetable.css";
 
 export default function ResourceTable({scheduleId}) {
     const [data, setData] = useState([]);
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [isEmployPopupOpen, setIsEmployPopupOpen] = useState(false);
+    const [isResourcePopupOpen, setIsResourcePopupOpen] = useState(false);
+    const [selectedCell, setSelectedCell] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -49,27 +52,69 @@ export default function ResourceTable({scheduleId}) {
         }
     };
 
-    const handleOpenPopup = () => {
-        setIsPopupOpen(true);
+    const handleOpenEmployPopup = () => {
+        setIsEmployPopupOpen(true);
     };
 
-    const handleClosePopup = () => {
-        setIsPopupOpen(false);
+    const handleCloseEmployPopup = () => {
+        setIsEmployPopupOpen(false);
     };
 
     const handleEmployCreated = (newEmploy) => {
         setData([...data, newEmploy]);
     };
 
+    const handleCellClick = (employId, day) => {
+        setSelectedCell({employId, day});
+        setIsResourcePopupOpen(true);
+    };
+
+    const handleCloseResourcePopup = () => {
+        setIsResourcePopupOpen(false);
+        setSelectedCell(null);
+    };
+
+    const handleResourceCreated = (newResource) => {
+        const updatedData = data.map(employ => {
+            if (employ.id === newResource.employ_id) {
+                return {...employ, resources: [...employ.resources, newResource]};
+            }
+            return employ;
+        });
+        setData(updatedData);
+    };
+
+    const getDayName = (day) => {
+        const date = new Date(currentYear, currentMonth, day);
+        return date.toLocaleString('default', {weekday: 'short'});
+    };
+
+    const isWeekend = (day) => {
+        const date = new Date(currentYear, currentMonth, day);
+        const dayOfWeek = date.getDay();
+        return dayOfWeek === 0 || dayOfWeek === 6;
+    };
+
     return (
         <>
             <div>
-                <button onClick={handleOpenPopup}>Add Employ</button>
-                {isPopupOpen && (
+                <button onClick={handleOpenEmployPopup}>Add Employ</button>
+                {isEmployPopupOpen && (
                     <CreateEmployPopup
-                        onClose={handleClosePopup}
+                        onClose={handleCloseEmployPopup}
                         onEmployCreated={handleEmployCreated}
                         scheduleId={scheduleId}
+                    />
+                )}
+                {isResourcePopupOpen && selectedCell && (
+                    <CreateResourcePopup
+                        onClose={handleCloseResourcePopup}
+                        onResourceCreated={handleResourceCreated}
+                        scheduleId={scheduleId}
+                        employId={selectedCell.employId}
+                        day={selectedCell.day}
+                        currentMonth={currentMonth}
+                        currentYear={currentYear}
                     />
                 )}
             </div>
@@ -85,7 +130,11 @@ export default function ResourceTable({scheduleId}) {
                         <tr>
                             <th>Employee Name</th>
                             {daysArray.map(day => (
-                                <th key={day}>{day}</th>
+                                <th key={day} className={isWeekend(day) ? 'weekend' : ''}>
+                                    {day}
+                                    <br/>
+                                    {getDayName(day)}
+                                </th>
                             ))}
                         </tr>
                         </thead>
@@ -94,7 +143,8 @@ export default function ResourceTable({scheduleId}) {
                             <tr key={employ.id}>
                                 <td>{employ.name}</td>
                                 {daysArray.map(day => (
-                                    <td key={day}>
+                                    <td key={day} className={isWeekend(day) ? 'weekend' : ''}
+                                        onClick={() => handleCellClick(employ.id, day)}>
                                         {getResourceForDay(employ.resources, day).map(resource => (
                                             <div key={resource.id}>{resource.name}</div>
                                         ))}
