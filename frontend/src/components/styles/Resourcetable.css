@@ -12,6 +12,14 @@
     text-align: left;
 }
 
+.resourceTable td:hover {
+    background-color: #f8f9fa;
+}
+
+.resourceTable td.weekend:hover {
+    background-color: #f8f9fa;
+}
+
 .resourceTable th.weekend, .resourceTable td.weekend {
     background-color: black;
     color: white;

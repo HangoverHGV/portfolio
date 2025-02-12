@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional
+from datetime import datetime
 
 class ScheduleCreate(BaseModel):
     title: str
@@ -16,6 +17,16 @@ class ResourceCreate(BaseModel):
     schedule_id: int
     employ_id: int
     resource_type: str
+
+    @field_validator('datetime_started', 'datetime_ended')
+    def parse_datetime(cls, value):
+        formats = ['%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M']
+        for fmt in formats:
+            try:
+                return datetime.strptime(value, fmt)
+            except ValueError:
+                continue
+        raise ValueError(f"time data '{value}' does not match any of the formats")
 
 class ResourceEdit(BaseModel):
     name: Optional[str] = None

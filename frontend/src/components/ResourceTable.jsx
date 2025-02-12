@@ -65,7 +65,22 @@ export default function ResourceTable({scheduleId}) {
     };
 
     const handleCellClick = (employId, day) => {
-        setSelectedCell({employId, day});
+        const date = new Date(currentYear, currentMonth, day);
+        const defaultStartTime = new Date(date);
+        defaultStartTime.setHours(8, 0);
+        const defaultEndTime = new Date(date);
+        defaultEndTime.setHours(16, 30);
+
+        const formatDate = (date) => {
+            return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+        };
+
+        setSelectedCell({
+            employId,
+            day,
+            defaultStartTime: formatDate(defaultStartTime),
+            defaultEndTime: formatDate(defaultEndTime)
+        });
         setIsResourcePopupOpen(true);
     };
 
@@ -115,6 +130,8 @@ export default function ResourceTable({scheduleId}) {
                         day={selectedCell.day}
                         currentMonth={currentMonth}
                         currentYear={currentYear}
+                        defaultStartTime={selectedCell.defaultStartTime}
+                        defaultEndTime={selectedCell.defaultEndTime}
                     />
                 )}
             </div>
