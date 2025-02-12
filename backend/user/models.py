@@ -98,5 +98,4 @@ class Resource(Base):
 
 
     schedule = relationship("Schedule", back_populates="resources")
-    employee = relationship("Employ", back_populates="resources")
 

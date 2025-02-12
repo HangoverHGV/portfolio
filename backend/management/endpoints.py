@@ -248,6 +248,10 @@ def delete_resource(resource_id: int, current_user: User = Depends(get_current_u
     return {"detail": "Resource deleted successfully"}
 
 
+def get_employ_resource(employ_id, current_user, db):
+    resources =  db.query(Resource).join(Employ).filter(Employ.id == employ_id).all()
+    return resources
+
 @router.get("/employ", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_EMPLOY)
 def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depends(get_current_user),
                     db: SessionLocal = Depends(get_db)):
@@ -260,10 +264,13 @@ def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depe
     else:
         employs = db.query(Employ).filter(Employ.user_id == current_user.id).all()
 
+
     return [
         {
             'name': employ.name,
             'user_id': employ.user_id,
+            'resources': [resources for resources in get_employ_resource(employ.id, current_user, db)]
+
         }
         for employ in employs
     ]
