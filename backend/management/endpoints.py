@@ -21,13 +21,16 @@ def check_schedule(schedule_id, current_user, db):
     return schedule_db
 
 @router.get("/schedules", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_SCHEDULES)
-def get_all_schedules(current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def get_all_schedules(user_id: Optional[int] = None, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
     if current_user.is_superuser:
         schedules = db.query(Schedule).all()
     elif current_user.is_active:
         schedules = db.query(Schedule).filter(Schedule.user_id == current_user.id).all()
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if user_id:
+        schedules = db.query(Schedule).filter(Schedule.user_id == user_id).all()
 
     return [
         {
