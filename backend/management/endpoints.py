@@ -146,8 +146,8 @@ def create_resource(resource: ResourceCreate, current_user: User = Depends(get_c
     if not schedule:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
 
-    start = datetime.strptime(resource.datetime_started, "%Y-%m-%dT%H:%M:%S")
-    end = datetime.strptime(resource.datetime_ended, "%Y-%m-%dT%H:%M:%S")
+    start = resource.datetime_started
+    end = resource.datetime_ended
     resource = Resource(name=resource.name, datetime_started=start, datetime_ended=end,
                         schedule_id=resource.schedule_id, user_id=current_user.id)
     db.add(resource)

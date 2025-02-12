@@ -20,7 +20,7 @@ class ResourceCreate(BaseModel):
 
     @field_validator('datetime_started', 'datetime_ended')
     def parse_datetime(cls, value):
-        formats = ['%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M']
+        formats = ['%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M', '%Y-%m-%dT%H:%M:%S.%fZ']
         for fmt in formats:
             try:
                 return datetime.strptime(value, fmt)

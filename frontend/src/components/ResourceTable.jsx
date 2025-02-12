@@ -5,6 +5,7 @@ import "./styles/Resourcetable.css";
 
 export default function ResourceTable({scheduleId}) {
     const [data, setData] = useState([]);
+    const [resources, setResources] = useState([]);
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [isEmployPopupOpen, setIsEmployPopupOpen] = useState(false);
@@ -29,13 +30,31 @@ export default function ResourceTable({scheduleId}) {
             }
         };
 
+        const fetchResources = async () => {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/management/resources?schedule_id=${scheduleId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                const result = await response.json();
+                setResources(result);
+            } catch (error) {
+                console.error("There was an error fetching the resources!", error);
+            }
+        };
+
         fetchData();
+        fetchResources();
     }, [scheduleId]);
 
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const daysArray = Array.from({length: daysInMonth}, (_, i) => i + 1);
 
-    const getResourceForDay = (resources, day) => {
+    const getResourceForDay = (day) => {
         return resources.filter(resource => {
             const resourceDate = new Date(resource.datetime_started);
             return resourceDate.getDate() === day && resourceDate.getMonth() === currentMonth && resourceDate.getFullYear() === currentYear;
@@ -97,6 +116,7 @@ export default function ResourceTable({scheduleId}) {
             return employ;
         });
         setData(updatedData);
+        setResources([...resources, newResource]);
     };
 
     const getDayName = (day) => {
@@ -162,8 +182,14 @@ export default function ResourceTable({scheduleId}) {
                                 {daysArray.map(day => (
                                     <td key={day} className={isWeekend(day) ? 'weekend' : ''}
                                         onClick={() => handleCellClick(employ.id, day)}>
-                                        {getResourceForDay(employ.resources, day).map(resource => (
-                                            <div key={resource.id}>{resource.name}</div>
+                                        {getResourceForDay(day).map(resource => (
+                                            <div key={resource.id} className="resource">
+                                                {resource.name}
+                                                <div className="tooltip">
+                                                    Start: {new Date(resource.datetime_started).toLocaleString()}<br/>
+                                                    End: {new Date(resource.datetime_ended).toLocaleString()}
+                                                </div>
+                                            </div>
                                         ))}
                                     </td>
                                 ))}
