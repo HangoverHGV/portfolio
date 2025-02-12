@@ -25,7 +25,7 @@ GET_ALL_SCHEDULES = {
 }
 
 CREATE_SCHEDULE = {
-    200: {
+    201: {
         "content": {
             "application/json": {
                 "example": {
@@ -140,7 +140,7 @@ GET_ALL_RESOURCES = {
 }
 
 CREATE_RESOURCE = {
-    200: {
+    201: {
         "content": {
             "application/json": {
                 "example": {
@@ -215,3 +215,21 @@ EDIT_RESOURCE = {
     },
 }
 
+DELETE_RESOURCE = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Resource deleted successfully"
+                }
+            },
+        },
+        "description": "Resource deleted successfully"
+    },
+    401: {
+        "description": "Not authenticated"
+    },
+    404: {
+        "description": "Resource not found"
+    },
+}

@@ -205,3 +205,19 @@ def edit_respurce(resource_id: int, resource: ResourceEdit, current_user: User =
         'created_at': resource_db.created_at,
         'updated_at': resource_db.updated_at
     }
+
+@router.delete("/resources/{resource_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=DELETE_RESOURCE)
+def delete_resource(resource_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    resource = db.query(Resource).filter(Resource.id == resource_id).first()
+    if not resource:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found")
+
+    if not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if not current_user.is_superuser and current_user.id != resource.user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    db.delete(resource)
+    db.commit()
+    return {"detail": "Resource deleted successfully"}

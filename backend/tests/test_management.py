@@ -279,4 +279,24 @@ class TestManagement:
             "updated_at": response.json()['updated_at']
         }
 
+    def test_delete_resource(self, client_with_db):
+        response = client_with_db.delete("/management/resources/1")
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+
+        user = self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        schedule = self.create_schedule(client_with_db, schedule1, token)
+        resource = self.create_resource(client_with_db, resource1, token)
+        response = client_with_db.delete("/management/resources/1",
+                                         headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {"detail": "Resource deleted successfully"}
+
+        response = client_with_db.delete("/management/resources/2",
+                                            headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 404
+        assert response.json() == {"detail": "Resource not found"}
+
+
 
