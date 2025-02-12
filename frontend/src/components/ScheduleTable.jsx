@@ -49,7 +49,7 @@ import React, { useState, useEffect } from "react";
                                 {schedules.map(schedule => (
                                     <tr key={schedule.id}>
                                         <td>
-                                            <a className="scheduleTitle" href={`/schedule/${schedule.id}`}>{schedule.title}</a>
+                                            <a className="scheduleTitle" href={`/planning/${schedule.id}`}>{schedule.title}</a>
                                         </td>
                                         <td>
                                             <button onClick={() => handleEdit(schedule.id)}>Edit</button>

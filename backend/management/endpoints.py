@@ -106,7 +106,7 @@ def get_all_resources(schedule_id: Optional[int] = None, current_user: User = De
     if schedule_id:
         resources = db.query(Resource).filter(Resource.schedule_id == schedule_id).all()
     else:
-        resources = db.query(Resource).all()
+        resources = db.query(Resource).filter(Resource.user_id == current_user.id).all()
 
     return [
         {
