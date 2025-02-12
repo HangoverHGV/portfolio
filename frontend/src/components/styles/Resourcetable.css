@@ -1,0 +1,19 @@
+.resourceTable{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.monthChange{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.monthChange button{
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 1px solid #f8f9fa;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
