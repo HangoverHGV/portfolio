@@ -20,3 +20,13 @@ class ResourceEdit(BaseModel):
     datetime_started: Optional[str] = None
     datetime_ended: Optional[str] = None
     schedule_id: Optional[int] = None
+
+
+class EmployCreate(BaseModel):
+    name: str
+    schedule_id: int
+
+class EmployEdit(BaseModel):
+    name: Optional[str] = None
+    schedule_id: Optional[int] = None
+    resources: Optional[list[int]] = None

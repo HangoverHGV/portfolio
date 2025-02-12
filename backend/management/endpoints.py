@@ -1,7 +1,7 @@
 from fastapi import (APIRouter, Depends, HTTPException, status)
 from user.models import Resource, Schedule, User, Employ, schedule_employ_association
 from configs import get_db, SessionLocal
-from management.schema import ScheduleCreate, ScheduleEdit, ResourceCreate, ResourceEdit
+from management.schema import ScheduleCreate, ScheduleEdit, ResourceCreate, ResourceEdit, EmployEdit, EmployCreate
 from datetime import timedelta, datetime
 from management.config import *
 from user.dependencies import authenticate_user, create_access_token, get_current_user
@@ -246,4 +246,88 @@ def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depe
         for employ in employs
     ]
 
+@router.post("/employ", tags=["management"], status_code=status.HTTP_201_CREATED, responses=CREATE_EMPLOY)
+def create_employ(employ: EmployCreate, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    if not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
+    schedule = db.query(Schedule).filter(Schedule.id == employ.schedule_id).first()
+    if not schedule:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
+
+    employ_db = Employ(name=employ.name, user_id=current_user.id)
+    db.add(employ_db)
+    db.commit()
+    db.refresh(employ_db)
+
+    # Add the association to the schedule
+    schedule.employees.append(employ_db)
+    db.commit()
+
+    return {
+        'id': employ_db.id,
+        'name': employ_db.name,
+        'schedule_id': employ.schedule_id,
+    }
+
+@router.get("/employ/{employ_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ONE_EMPLOY)
+def get_employ(employ_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    employ = db.query(Employ).filter(Employ.id == employ_id).first()
+    if not employ:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employ not found")
+
+    if not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    return {
+        'id': employ.id,
+        'name': employ.name,
+        'schedule_id': employ.schedule_id,
+        'resources': [resource.id for resource in employ.resources]
+    }
+
+@router.put("/employ/{employ_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_EMPLOY)
+def edit_employ(employ_id: int, employ: EmployEdit, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    employ_db = db.query(Employ).filter(Employ.id == employ_id).first()
+    if not employ_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employ not found")
+
+    if not current_user.is_superuser and (current_user.id != employ_db.user_id or not current_user.is_active):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if employ.name is not None:
+        employ_db.name = employ.name
+
+    if employ.schedule_id is not None:
+        schedule = db.query(Schedule).filter(Schedule.id == employ.schedule_id).first()
+        if not schedule:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
+
+        employ_db.schedule_id = employ.schedule_id
+
+    if employ.resources is not None:
+        resources = db.query(Resource).filter(Resource.id.in_(employ.resources)).all()
+        employ_db.resources = resources
+
+    db.commit()
+    db.refresh(employ_db)
+
+    return {
+        'id': employ_db.id,
+        'name': employ_db.name,
+        'schedule_id': employ_db.schedule_id,
+        'resources': [resource.id for resource in employ_db.resources]
+    }
+
+@router.delete("/employ/{employ_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=DELETE_EMPLOY)
+def delete_employ(employ_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    employ = db.query(Employ).filter(Employ.id == employ_id).first()
+    if not employ:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employ not found")
+
+    if not current_user.is_superuser and (current_user.id != employ.user_id or not current_user.is_active):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    db.delete(employ)
+    db.commit()
+    return {"detail": "Employ deleted successfully"}
