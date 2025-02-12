@@ -141,4 +141,23 @@ class TestManagement:
         assert response.status_code == 404
         assert response.json() == {"detail": "Schedule not found"}
 
+    def test_delete_schedule(self, client_with_db):
+        response = client_with_db.delete("/management/schedules/1")
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
 
+        # create user
+        user = self.create_user(client_with_db, user1)
+        # create schedule
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        schedule = self.create_schedule(client_with_db, schedule1, token)
+        # delete schedule
+        response = client_with_db.delete("/management/schedules/1",
+                                         headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {"detail": "Schedule deleted successfully"}
+
+        response = client_with_db.delete("/management/schedules/2",
+                                            headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 404
+        assert response.json() == {"detail": "Schedule not found"}

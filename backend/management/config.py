@@ -88,6 +88,25 @@ EDIT_SCHEDULE = {
     },
 }
 
+DELETE_SCHEDULE = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Schedule deleted successfully"
+                }
+            },
+        },
+        "description": "Schedule deleted successfully"
+    },
+    401: {
+        "description": "Not authenticated"
+    },
+    404: {
+        "description": "Schedule not found"
+    },
+}
+
 
 
 

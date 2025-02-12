@@ -10,6 +10,16 @@ from typing import Optional
 
 router = APIRouter()
 
+def check_schedule(schedule_id, current_user, db):
+    schedule_db = db.query(Schedule).filter(Schedule.id == schedule_id).first()
+    if not schedule_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
+
+    if not current_user.is_superuser and (not current_user.is_active or current_user.id != schedule_db.user_id):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    return schedule_db
+
 @router.get("/schedules", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_SCHEDULES)
 def get_all_schedules(current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
     if current_user.is_superuser:
@@ -60,12 +70,8 @@ def get_one_schedule(schedule_id: int, current_user: User = Depends(get_current_
 
 @router.put("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_SCHEDULE)
 def edit_schedule(schedule_id: int, schedule: ScheduleEdit, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
-    schedule_db = db.query(Schedule).filter(Schedule.id == schedule_id).first()
-    if not schedule_db:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
 
-    if not current_user.is_superuser and (not current_user.is_active or current_user.id != schedule_db.user_id):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    schedule_db = check_schedule(schedule_id, current_user, db)
 
     if schedule.title is not None:
         schedule_db.title = schedule.title
@@ -79,3 +85,12 @@ def edit_schedule(schedule_id: int, schedule: ScheduleEdit, current_user: User =
         'created_at': schedule_db.created_at,
         'updated_at': schedule_db.updated_at
     }
+
+@router.delete("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=DELETE_SCHEDULE)
+def delete_schedule(schedule_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    schedule = check_schedule(schedule_id, current_user, db)
+
+    db.delete(schedule)
+    db.commit()
+    return {"detail": "Schedule deleted successfully"}
+
