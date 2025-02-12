@@ -44,3 +44,30 @@ class BlogPost(Base):
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
 
+
+class Resource(Base):
+    __tablename__ = "resources"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    datetime_started = Column(DateTime)
+    datetime_ended = Column(DateTime)
+
+    schedule_id = Column(Integer, ForeignKey('schedules.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
+
+    schedule = relationship("Schedule", back_populates="resources")
+
+
+class Schedule(Base):
+    __tablename__ = "schedules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+    resources = relationship("Resource", back_populates="schedule", cascade="all, delete-orphan")
+
+
