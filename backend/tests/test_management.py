@@ -4,7 +4,6 @@ Tests for the Management API endpoints using FastAPI TestClient and an in-memory
 """
 from conftest import client_with_db
 
-
 user1 = {
     "name": "Test User",
     "email": "test@example.com",
@@ -55,7 +54,8 @@ class TestManagement:
         return response
 
     def create_schedule(self, client_with_db, schedule_json, token):
-        response = client_with_db.post("/management/schedules", json=schedule_json, headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        response = client_with_db.post("/management/schedules", json=schedule_json,
+                                       headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         return response
 
     def test_get_all_schedules(self, client_with_db):
@@ -65,6 +65,42 @@ class TestManagement:
         # login as user
         user = self.create_user(client_with_db, user1)
         token = self.get_token(client_with_db, user1['email'], user1['password'])
-        response = client_with_db.get("/management/schedules", headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        response = client_with_db.get("/management/schedules",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 200
+
+    def test_create_schedule(self, client_with_db):
+        response = client_with_db.post("/management/schedules", json=schedule1)
+        assert response.status_code == 401
+        # login as user
+        user = self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        response = self.create_schedule(client_with_db, schedule1, token)
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "title": "Test Schedule1",
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
+    def test_get_one_schedule(self, client_with_db):
+        # create user
+        user = self.create_user(client_with_db, user1)
+        # create schedule
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        schedule = self.create_schedule(client_with_db, schedule1, token)
+        # get schedule
+        response = client_with_db.get("/management/schedules/1",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "title": "Test Schedule1",
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
 

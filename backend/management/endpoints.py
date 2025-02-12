@@ -1,6 +1,7 @@
 from fastapi import (APIRouter, Depends, HTTPException, status)
 from user.models import Resource, Schedule, User
 from configs import get_db, SessionLocal
+from management.schema import ScheduleCreate, ScheduleEdit
 from datetime import timedelta
 from management.config import *
 from user.dependencies import authenticate_user, create_access_token, get_current_user
@@ -28,3 +29,15 @@ def get_all_schedules(current_user: User = Depends(get_current_user), db: Sessio
         }
         for schedule in schedules
     ]
+
+@router.post("/schedules", tags=["management"], status_code=status.HTTP_200_OK, responses=CREATE_SCHEDULE)
+def create_schedule(schedule: ScheduleCreate, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    if not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    schedule = Schedule(title=schedule.title, user_id=current_user.id)
+    db.add(schedule)
+    db.commit()
+    db.refresh(schedule)
+    return schedule
+
