@@ -9,12 +9,14 @@ from typing import Optional
 
 router = APIRouter()
 
-@router.get("/", tags=["blogpost"], status_code=status.HTTP_200_OK, responses=BLOGPOST_GET_ALL_RESPONSE_CONFIG)
-def get_all_schedules(schedules: Schedule, current_user: Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+@router.get("/schedules", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_SCHEDULES)
+def get_all_schedules(current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
     if current_user.is_superuser:
         schedules = db.query(Schedule).all()
     elif current_user.is_active:
         schedules = db.query(Schedule).filter(Schedule.user_id == current_user.id).all()
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     return [
         {
