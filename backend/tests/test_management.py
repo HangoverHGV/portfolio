@@ -208,6 +208,8 @@ class TestManagement:
         user = self.create_user(client_with_db, user1)
         # create resource
         token = self.get_token(client_with_db, user1['email'], user1['password'])
+        schedule = self.create_schedule(client_with_db, schedule1, token)
+        resource1['schedule_id'] = 1
         resource = self.create_resource(client_with_db, resource1, token)
         # get resource
         response = client_with_db.get("/management/resources/1",
@@ -228,4 +230,53 @@ class TestManagement:
                                       headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 404
         assert response.json() == {"detail": "Resource not found"}
+
+    def test_edit_resource(self, client_with_db):
+        response = client_with_db.put("/management/resources/1", json={"name": "New Name"})
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+
+        user = self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        schedule = self.create_schedule(client_with_db, schedule1, token)
+        resource = self.create_resource(client_with_db, resource1, token)
+        response = client_with_db.put("/management/resources/1", json={"name": "New Name"},
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "New Name",
+            "datetime_started": "2021-01-01T00:00:00",
+            "datetime_ended": "2021-01-01T01:00:00",
+            "schedule_id": 1,
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
+        response = client_with_db.put("/management/resources/2", json={"name": "New Name"},
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 404
+        assert response.json() == {"detail": "Schedule or Resource not found"}
+
+        response = client_with_db.put("/management/resources/1", json={"name": "New Name", "schedule_id": 2},
+                                        headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 404
+        assert response.json() == {"detail": "Schedule or Resource not found"}
+
+        sch2 = self.create_schedule(client_with_db, schedule2, token)
+        response = client_with_db.put("/management/resources/1", json={"name": "New Name", "schedule_id": 2},
+                                        headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "New Name",
+            "datetime_started": "2021-01-01T00:00:00",
+            "datetime_ended": "2021-01-01T01:00:00",
+            "schedule_id": 2,
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
 

@@ -123,6 +123,10 @@ def create_resource(resource: ResourceCreate, current_user: User = Depends(get_c
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
+    schedule = db.query(Schedule).filter(Schedule.id == resource.schedule_id).first()
+    if not schedule:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
+
     start = datetime.strptime(resource.datetime_started, "%Y-%m-%dT%H:%M:%S")
     end = datetime.strptime(resource.datetime_ended, "%Y-%m-%dT%H:%M:%S")
     resource = Resource(name=resource.name, datetime_started=start, datetime_ended=end, schedule_id=resource.schedule_id, user_id=current_user.id)
@@ -161,3 +165,43 @@ def get_resource(resource_id: int, current_user: User = Depends(get_current_user
         'updated_at': resource.updated_at
     }
 
+@router.put("/resources/{resource_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_RESOURCE)
+def edit_respurce(resource_id: int, resource: ResourceEdit, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    resource_db = db.query(Resource).filter(Resource.id == resource_id).first()
+    if not resource_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule or Resource not found")
+
+    if not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if not current_user.is_superuser and current_user.id != resource_db.user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if resource.schedule_id is not None:
+        schedule = db.query(Schedule).filter(Schedule.id == resource.schedule_id).first()
+        if not schedule:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule or Resource not found")
+        resource_db.schedule_id = resource.schedule_id
+
+    if resource.name is not None:
+        resource_db.name = resource.name
+
+    if resource.datetime_started is not None:
+        resource_db.datetime_started = datetime.strptime(resource["datetime_started"], "%Y-%m-%dT%H:%M:%S")
+
+    if resource.datetime_ended is not None:
+        resource_db.datetime_ended = datetime.strptime(resource["datetime_ended"], "%Y-%m-%dT%H:%M:%S")
+
+    db.commit()
+    db.refresh(resource_db)
+
+    return {
+        'id': resource_db.id,
+        'name': resource_db.name,
+        'datetime_started': resource_db.datetime_started,
+        'datetime_ended': resource_db.datetime_ended,
+        'schedule_id': resource_db.schedule_id,
+        'user_id': resource_db.user_id,
+        'created_at': resource_db.created_at,
+        'updated_at': resource_db.updated_at
+    }

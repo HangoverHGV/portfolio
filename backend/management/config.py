@@ -159,6 +159,9 @@ CREATE_RESOURCE = {
     401: {
         "description": "Not authenticated"
     },
+    404: {
+        "description": "Schedule not found"
+    },
 }
 
 GET_ONE_RESOURCE = {
@@ -184,6 +187,31 @@ GET_ONE_RESOURCE = {
     },
     404: {
         "description": "Resource not found"
+    },
+}
+
+EDIT_RESOURCE = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "name": "Test Resource1",
+                    "datetime_started": "2021-01-01T00:00:00",
+                    "datetime_ended": "2021-01-01T01:00:00",
+                    "schedule_id": 1,
+                    "user_id": 1,
+                    "created_at": "2021-01-01T00:00:00",
+                    "updated_at": "2021-01-01T00:00:00"
+                }
+            },
+        },
+        "description": "Resource updated successfully"
+    },
+    401: {
+        "description": "Not authenticated"
+    },
+    404: {
+        "description": "Schedule or Resource not found"
     },
 }
 
