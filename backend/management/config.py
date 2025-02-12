@@ -107,7 +107,34 @@ DELETE_SCHEDULE = {
     },
 }
 
-
-
-
-
+GET_ALL_RESOURCES = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": [
+                    {
+                        "id": 1,
+                        "name": "Resource 1",
+                        "datetime_started": "2021-01-01T00:00:00",
+                        "datetime_ended": "2021-01-01T00:00:00",
+                        "schedule_id": 1,
+                        "user_id": 1,
+                        "created_at": "2021-01-01T00:00:00",
+                        "updated_at": "2021-01-01T00:00:00"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Resource 2",
+                        "datetime_started": "2021-01-01T00:00:00",
+                        "datetime_ended": "2021-01-01T00:00:00",
+                        "schedule_id": 2,
+                        "user_id": 2,
+                        "created_at": "2021-01-01T00:00:00",
+                        "updated_at": "2021-01-01T00:00:00"
+                    }
+                ]
+            },
+        },
+        "description": "Resources fetched successfully"
+    },
+}

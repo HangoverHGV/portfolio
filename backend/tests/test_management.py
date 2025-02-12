@@ -161,3 +161,16 @@ class TestManagement:
                                             headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 404
         assert response.json() == {"detail": "Schedule not found"}
+
+    def test_get_all_resources(self, client_with_db):
+        response = client_with_db.get("/management/resources")
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+        # login as user
+        user = self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        response = client_with_db.get("/management/resources",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+
+

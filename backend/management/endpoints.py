@@ -94,3 +94,29 @@ def delete_schedule(schedule_id: int, current_user: User = Depends(get_current_u
     db.commit()
     return {"detail": "Schedule deleted successfully"}
 
+
+@router.get("/resources", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_RESOURCES)
+def get_all_resources(current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    if current_user.is_superuser:
+        resources = db.query(Resource).all()
+    elif current_user.is_active:
+        resources = db.query(Resource).filter(Resource.user_id == current_user.id).all()
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    return [
+        {
+            'id': resource.id,
+            'name': resource.name,
+            'datetime_started': resource.datetime_started,
+            'datetime_ended': resource.datetime_ended,
+            'schedule_id': resource.schedule_id,
+            'user_id': resource.user_id,
+            'created_at': resource.created_at,
+            'updated_at': resource.updated_at
+        }
+        for resource in resources
+    ]
+
+
+
