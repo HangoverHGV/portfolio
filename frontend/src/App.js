@@ -10,6 +10,7 @@ import User from "./pages/User";
 import EditPost from "./pages/EditPost";
 import UserFromAdmin from "./pages/UserFromAdmin";
 import CreatePost from "./pages/CreatePost";
+import Planning from "./pages/Planning";
 
 const router = createBrowserRouter([
     {path: "/" , element: <HomePage/>},
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
     {path: "/edit/:postId" , element: <EditPost/>},
     {path: "/user/:userId" , element: <UserFromAdmin/>},
     {path: "/create-post" , element: <CreatePost/>},
+    {path: "/planning" , element: <Planning/>}
     ]);
 
 function App() {

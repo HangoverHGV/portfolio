@@ -76,6 +76,10 @@
     {
       "title": "Home Lab",
       "description": "I have a home lab where I test new technologies and create small projects. I installed Proxmox on an old computer and created a few virtual machines. On them I have a VPN connector, an add-free DNS server, Home Assistant and a Kalilinux machine to test security."
+    },
+    {
+      "title": "My Preserver",
+      "description": "I installed CUPS on a Ubuntu VM and connected a printer to it. I created a small web app that allows you to upload a file and print it. The app is available on my local network and can be accessed from any device."
     }
   ],
   "education": [
