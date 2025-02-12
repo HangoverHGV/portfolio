@@ -13,6 +13,7 @@ export default function CreateResourcePopup({
     const [name, setName] = useState("");
     const [datetimeStarted, setDatetimeStarted] = useState("");
     const [datetimeEnded, setDatetimeEnded] = useState("");
+    const [resourceType, setResourceType] = useState("work");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +22,8 @@ export default function CreateResourcePopup({
             datetime_started: datetimeStarted,
             datetime_ended: datetimeEnded,
             schedule_id: scheduleId,
-            employ_id: employId
+            employ_id: employId,
+            resource_type: resourceType
         };
 
         try {
@@ -65,6 +67,13 @@ export default function CreateResourcePopup({
                         End Date and Time:
                         <input type="datetime-local" value={datetimeEnded}
                                onChange={(e) => setDatetimeEnded(e.target.value)} required/>
+                    </label>
+                    <label>
+                        Resource Type:
+                        <select value={resourceType} onChange={(e) => setResourceType(e.target.value)} required>
+                            <option value="work">Work</option>
+                            <option value="holiday">Holiday</option>
+                        </select>
                     </label>
                     <button type="submit">Create</button>
                 </form>
