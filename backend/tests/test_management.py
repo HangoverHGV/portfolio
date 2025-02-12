@@ -60,6 +60,11 @@ class TestManagement:
                                        headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         return response
 
+    def create_resource(self, client_with_db, resource_json, token):
+        response = client_with_db.post("/management/resources", json=resource_json,
+                                       headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        return response
+
     def test_get_all_schedules(self, client_with_db):
         response = client_with_db.get("/management/schedules")
         assert response.status_code == 401
@@ -172,5 +177,26 @@ class TestManagement:
         response = client_with_db.get("/management/resources",
                                       headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 200
+
+    def test_create_resource(self, client_with_db):
+        response = client_with_db.post("/management/resources", json=resource1)
+        assert response.status_code == 401
+        # login as user
+        user = self.create_user(client_with_db, user1)
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        schedule = self.create_schedule(client_with_db, schedule1, token)
+        resource1['schedule_id'] = 1
+        response = self.create_resource(client_with_db, resource1, token)
+        assert response.status_code == 201
+        assert response.json() == {
+            "id": 1,
+            "name": "Test Resource1",
+            "datetime_started": "2021-01-01T00:00:00",
+            "datetime_ended": "2021-01-01T01:00:00",
+            "schedule_id": 1,
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
 
 

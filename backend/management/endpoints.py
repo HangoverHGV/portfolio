@@ -1,8 +1,8 @@
 from fastapi import (APIRouter, Depends, HTTPException, status)
 from user.models import Resource, Schedule, User
 from configs import get_db, SessionLocal
-from management.schema import ScheduleCreate, ScheduleEdit
-from datetime import timedelta
+from management.schema import ScheduleCreate, ScheduleEdit, ResourceCreate, ResourceEdit
+from datetime import timedelta, datetime
 from management.config import *
 from user.dependencies import authenticate_user, create_access_token, get_current_user
 from typing import Optional
@@ -118,5 +118,26 @@ def get_all_resources(current_user: User = Depends(get_current_user), db: Sessio
         for resource in resources
     ]
 
+@router.post("/resources", tags=["management"], status_code=status.HTTP_201_CREATED, responses=CREATE_RESOURCE)
+def create_resource(resource: ResourceCreate, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    if not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    start = datetime.strptime(resource.datetime_started, "%Y-%m-%dT%H:%M:%S")
+    end = datetime.strptime(resource.datetime_ended, "%Y-%m-%dT%H:%M:%S")
+    resource = Resource(name=resource.name, datetime_started=start, datetime_ended=end, schedule_id=resource.schedule_id, user_id=current_user.id)
+    db.add(resource)
+    db.commit()
+    db.refresh(resource)
+    return {
+        'id': resource.id,
+        'name': resource.name,
+        'datetime_started': resource.datetime_started,
+        'datetime_ended': resource.datetime_ended,
+        'schedule_id': resource.schedule_id,
+        'user_id': resource.user_id,
+        'created_at': resource.created_at,
+        'updated_at': resource.updated_at
+    }
 
 

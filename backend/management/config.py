@@ -138,3 +138,26 @@ GET_ALL_RESOURCES = {
         "description": "Resources fetched successfully"
     },
 }
+
+CREATE_RESOURCE = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "name": "Test Resource1",
+                    "datetime_started": "2021-01-01T00:00:00",
+                    "datetime_ended": "2021-01-01T01:00:00",
+                    "schedule_id": 1,
+                    "user_id": 1,
+                    "created_at": "2021-01-01T00:00:00",
+                    "updated_at": "2021-01-01T00:00:00"
+                }
+            },
+        },
+        "description": "Resource created successfully"
+    },
+    401: {
+        "description": "Not authenticated"
+    },
+}
+
