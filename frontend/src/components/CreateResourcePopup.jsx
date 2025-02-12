@@ -38,7 +38,6 @@ export default function CreateResourcePopup({
             employ_id: employId,
             resource_type: resourceType
         };
-        console.log(newResource);
         try {
             const response = await fetch("http://127.0.0.1:8000/management/resources", {
                 method: "POST",
