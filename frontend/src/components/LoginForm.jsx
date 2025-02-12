@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import styles from "./styles/SigupForm.module.css";
 
 export default function LoginForm() {
@@ -40,6 +40,7 @@ export default function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit} className={styles.signupForm}>
+            <h1>Login</h1>
             <div className={styles.formGroup}>
                 <label>Username:</label>
                 <input
@@ -58,7 +59,7 @@ export default function LoginForm() {
                     required
                 />
             </div>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p style={{color: "red"}}>{error}</p>}
             <button type="submit" className={styles.submitButton}>Login</button>
         </form>
     );

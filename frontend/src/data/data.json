@@ -70,7 +70,7 @@
   },
   "personalprojects": [
     {
-      "title": "Python package to have a improved test preview",
+      "title": "Python package to have an improved test preview",
       "description": "I created a Python package that allows you to preview and run the test in a more user-friendly way. The package is available on PyPI and can be installed using pip. The package is called <a href=\"https://pypi.org/project/better-test-preview/\">better-test-preview</a>."
     },
     {

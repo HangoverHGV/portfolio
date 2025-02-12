@@ -1,0 +1,41 @@
+.createPostContainer{
+    margin-top: 20px;
+}
+.glow {
+    font-size: 2em;
+    color: white;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+
+
+.inputContainer{
+    margin-top: 20px;
+}
+
+.inputContainer label{
+    font-size: 1.5em;
+    color: white;
+}
+
+.inputContainer input{
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 1.2em;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.inputContainer label{
+    font-size: 1.5em;
+    color: white;
+}
+.submitButton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #93b1a6;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: solid 2px black;
+}

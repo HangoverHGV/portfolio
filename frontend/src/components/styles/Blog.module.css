@@ -9,4 +9,46 @@
 .createPostButton{
     margin-top: 20px;
     margin-bottom: 20px;
+    background-color: #93b1a6;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: solid 2px black;
+}
+
+.createPostButton:hover{
+    background-color: #5c8374;
+}
+
+.filterContainer label{
+    font-size: 1.5em;
+    color: white;
+}
+
+.filterContainer select{
+    margin-left: 10px;
+    font-size: 1.2em;
+    padding: 5px;
+    border-radius: 5px;
+}
+.filterContainer select:hover{
+    background-color: #93b1a6;
+    border-radius: 10px;
+}
+
+.blogItem a{
+    font-size: 1.3em;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.blogItem a:visited{
+    color: #ffd773;
+}
+
+.blogContainer{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
 }

@@ -46,3 +46,7 @@
     background-color: rgb(147, 177, 166);
     border-radius: 10px;
 }
+
+.logout a:hover{
+    background-color: red;
+}

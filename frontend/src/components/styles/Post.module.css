@@ -1,7 +1,7 @@
 .buttonContainer {
     position: absolute;
     top: 100px;
-    right: 50%;
+    right: 5%;
 }
 .content{
     margin-top: 20px;
@@ -9,4 +9,24 @@
     padding: 20px;
     border-radius: 10px;
     background-color: #f0f0f0;
+}
+.username{
+    font-size: 1em;
+    color: #666;
+}
+.blogTitle{
+    font-size: 2em;
+    color: #ffffff;
+}
+
+.buttonContainer button{
+    margin-right: 10px;
+    background-color: #93b1a6;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: solid 2px black;
+}
+
+.buttonContainer button:hover{
+    background-color: #5c8374;
 }
