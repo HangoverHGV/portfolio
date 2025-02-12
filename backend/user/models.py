@@ -7,6 +7,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Boolean, Date, Foreign
 from sqlalchemy.orm import relationship
 import datetime
 from passlib.context import CryptContext
+from typing import List
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -64,7 +65,7 @@ class Employ(Base):
     updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
 
     schedules = relationship("Schedule", secondary=schedule_employ_association, back_populates="employees")
-    resources = relationship("Resource", back_populates="employee")
+    resources = relationship("Resource", back_populates="employ")
     user = relationship("User", back_populates="employees")
 
 class Schedule(Base):
@@ -91,8 +92,10 @@ class Resource(Base):
     schedule_id = Column(Integer, ForeignKey('schedules.id'))
     user_id = Column(Integer, ForeignKey('users.id'))
     employ_id = Column(Integer, ForeignKey('employs.id'))
+    employ = relationship("Employ", back_populates="resources")
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
+
 
     schedule = relationship("Schedule", back_populates="resources")
     employee = relationship("Employ", back_populates="resources")

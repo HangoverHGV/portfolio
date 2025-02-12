@@ -7,8 +7,8 @@ from management.config import *
 from user.dependencies import authenticate_user, create_access_token, get_current_user
 from typing import Optional
 
-
 router = APIRouter()
+
 
 def check_schedule(schedule_id, current_user, db):
     schedule_db = db.query(Schedule).filter(Schedule.id == schedule_id).first()
@@ -20,8 +20,10 @@ def check_schedule(schedule_id, current_user, db):
 
     return schedule_db
 
+
 @router.get("/schedules", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_SCHEDULES)
-def get_all_schedules(user_id: Optional[int] = None, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def get_all_schedules(user_id: Optional[int] = None, current_user: User = Depends(get_current_user),
+                      db: SessionLocal = Depends(get_db)):
     if current_user.is_superuser:
         schedules = db.query(Schedule).all()
     elif current_user.is_active:
@@ -43,8 +45,10 @@ def get_all_schedules(user_id: Optional[int] = None, current_user: User = Depend
         for schedule in schedules
     ]
 
+
 @router.post("/schedules", tags=["management"], status_code=status.HTTP_201_CREATED, responses=CREATE_SCHEDULE)
-def create_schedule(schedule: ScheduleCreate, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def create_schedule(schedule: ScheduleCreate, current_user: User = Depends(get_current_user),
+                    db: SessionLocal = Depends(get_db)):
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
@@ -54,8 +58,10 @@ def create_schedule(schedule: ScheduleCreate, current_user: User = Depends(get_c
     db.refresh(schedule)
     return schedule
 
+
 @router.get("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ONE_SCHEDULE)
-def get_one_schedule(schedule_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def get_one_schedule(schedule_id: int, current_user: User = Depends(get_current_user),
+                     db: SessionLocal = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
@@ -71,9 +77,10 @@ def get_one_schedule(schedule_id: int, current_user: User = Depends(get_current_
         'updated_at': schedule.updated_at
     }
 
-@router.put("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_SCHEDULE)
-def edit_schedule(schedule_id: int, schedule: ScheduleEdit, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
 
+@router.put("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_SCHEDULE)
+def edit_schedule(schedule_id: int, schedule: ScheduleEdit, current_user: User = Depends(get_current_user),
+                  db: SessionLocal = Depends(get_db)):
     schedule_db = check_schedule(schedule_id, current_user, db)
 
     if schedule.title is not None:
@@ -89,8 +96,11 @@ def edit_schedule(schedule_id: int, schedule: ScheduleEdit, current_user: User =
         'updated_at': schedule_db.updated_at
     }
 
-@router.delete("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=DELETE_SCHEDULE)
-def delete_schedule(schedule_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+
+@router.delete("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK,
+               responses=DELETE_SCHEDULE)
+def delete_schedule(schedule_id: int, current_user: User = Depends(get_current_user),
+                    db: SessionLocal = Depends(get_db)):
     schedule = check_schedule(schedule_id, current_user, db)
 
     db.delete(schedule)
@@ -99,7 +109,10 @@ def delete_schedule(schedule_id: int, current_user: User = Depends(get_current_u
 
 
 @router.get("/resources", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_RESOURCES)
-def get_all_resources(schedule_id: Optional[int] = None, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def get_all_resources(schedule_id: Optional[int] = None, current_user: User = Depends(get_current_user),
+                      db: SessionLocal = Depends(get_db)):
+    print(10 * "***")
+    print(current_user.id)
     if not current_user.is_superuser and not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
@@ -122,8 +135,10 @@ def get_all_resources(schedule_id: Optional[int] = None, current_user: User = De
         for resource in resources
     ]
 
+
 @router.post("/resources", tags=["management"], status_code=status.HTTP_201_CREATED, responses=CREATE_RESOURCE)
-def create_resource(resource: ResourceCreate, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def create_resource(resource: ResourceCreate, current_user: User = Depends(get_current_user),
+                    db: SessionLocal = Depends(get_db)):
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
@@ -133,7 +148,8 @@ def create_resource(resource: ResourceCreate, current_user: User = Depends(get_c
 
     start = datetime.strptime(resource.datetime_started, "%Y-%m-%dT%H:%M:%S")
     end = datetime.strptime(resource.datetime_ended, "%Y-%m-%dT%H:%M:%S")
-    resource = Resource(name=resource.name, datetime_started=start, datetime_ended=end, schedule_id=resource.schedule_id, user_id=current_user.id)
+    resource = Resource(name=resource.name, datetime_started=start, datetime_ended=end,
+                        schedule_id=resource.schedule_id, user_id=current_user.id)
     db.add(resource)
     db.commit()
     db.refresh(resource)
@@ -169,8 +185,10 @@ def get_resource(resource_id: int, current_user: User = Depends(get_current_user
         'updated_at': resource.updated_at
     }
 
+
 @router.put("/resources/{resource_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_RESOURCE)
-def edit_respurce(resource_id: int, resource: ResourceEdit, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def edit_respurce(resource_id: int, resource: ResourceEdit, current_user: User = Depends(get_current_user),
+                  db: SessionLocal = Depends(get_db)):
     resource_db = db.query(Resource).filter(Resource.id == resource_id).first()
     if not resource_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule or Resource not found")
@@ -210,8 +228,11 @@ def edit_respurce(resource_id: int, resource: ResourceEdit, current_user: User =
         'updated_at': resource_db.updated_at
     }
 
-@router.delete("/resources/{resource_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=DELETE_RESOURCE)
-def delete_resource(resource_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+
+@router.delete("/resources/{resource_id}", tags=["management"], status_code=status.HTTP_200_OK,
+               responses=DELETE_RESOURCE)
+def delete_resource(resource_id: int, current_user: User = Depends(get_current_user),
+                    db: SessionLocal = Depends(get_db)):
     resource = db.query(Resource).filter(Resource.id == resource_id).first()
     if not resource:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found")
@@ -226,8 +247,10 @@ def delete_resource(resource_id: int, current_user: User = Depends(get_current_u
     db.commit()
     return {"detail": "Resource deleted successfully"}
 
+
 @router.get("/employ", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ALL_EMPLOY)
-def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depends(get_current_user),
+                    db: SessionLocal = Depends(get_db)):
     if not current_user.is_superuser and not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
@@ -236,18 +259,19 @@ def get_all_employs(schedule_id: Optional[int] = None, current_user: User = Depe
             schedule_employ_association.c.schedule_id == schedule_id).all()
     else:
         employs = db.query(Employ).filter(Employ.user_id == current_user.id).all()
+
     return [
         {
-            'id': employ.id,
             'name': employ.name,
-            'schedule_id': employ.schedule_id,
-            'resources': [resource.id for resource in employ.resources]
+            'user_id': employ.user_id,
         }
         for employ in employs
     ]
 
+
 @router.post("/employ", tags=["management"], status_code=status.HTTP_201_CREATED, responses=CREATE_EMPLOY)
-def create_employ(employ: EmployCreate, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def create_employ(employ: EmployCreate, current_user: User = Depends(get_current_user),
+                  db: SessionLocal = Depends(get_db)):
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
@@ -270,6 +294,7 @@ def create_employ(employ: EmployCreate, current_user: User = Depends(get_current
         'schedule_id': employ.schedule_id,
     }
 
+
 @router.get("/employ/{employ_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ONE_EMPLOY)
 def get_employ(employ_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
     employ = db.query(Employ).filter(Employ.id == employ_id).first()
@@ -286,8 +311,10 @@ def get_employ(employ_id: int, current_user: User = Depends(get_current_user), d
         'resources': [resource.id for resource in employ.resources]
     }
 
+
 @router.put("/employ/{employ_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_EMPLOY)
-def edit_employ(employ_id: int, employ: EmployEdit, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+def edit_employ(employ_id: int, employ: EmployEdit, current_user: User = Depends(get_current_user),
+                db: SessionLocal = Depends(get_db)):
     employ_db = db.query(Employ).filter(Employ.id == employ_id).first()
     if not employ_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employ not found")
@@ -318,6 +345,7 @@ def edit_employ(employ_id: int, employ: EmployEdit, current_user: User = Depends
         'schedule_id': employ_db.schedule_id,
         'resources': [resource.id for resource in employ_db.resources]
     }
+
 
 @router.delete("/employ/{employ_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=DELETE_EMPLOY)
 def delete_employ(employ_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
