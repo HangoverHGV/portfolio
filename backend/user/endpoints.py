@@ -167,7 +167,7 @@ async def create_superuser(user: SuperUserCreate, db: SessionLocal = Depends(get
     }
 
 
-@router.post("/token", tags=["user"], status_code=status.HTTP_200_OK)
+@router.post("/token", tags=["user"], status_code=status.HTTP_200_OK, responses=TOKEN_RESPONSE)
 async def login_for_access_token(db: SessionLocal = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     user_db = authenticate_user(form_data.username, form_data.password, db)
     if not user_db:

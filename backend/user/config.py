@@ -2,7 +2,6 @@
 This file contains the configuration for the user response examples in Swagger UI.
 """
 
-
 from os import getenv
 
 USER_GET_ALL_RESPONSE_CONFIG = {
@@ -41,7 +40,6 @@ USER_GET_RESPONSE_CONFIG = {
         "description": "User fetched successfully"
     }
 }
-
 
 USER_POST_RESPONSE_CONFIG = {
     201: {
@@ -100,7 +98,6 @@ USER_DELETE_RESPONSE_CONFIG = {
         "description": "You don't have permission to delete this user"
     }
 }
-
 
 USER_EDIT_RESPONSE_CONFIG = {
     200: {
@@ -210,8 +207,28 @@ USER_MY_USER_RESPONSE_CONFIG = {
     }
 }
 
-
-
+TOKEN_RESPONSE = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "access_token": "<TOKEN>",
+                    "token_type": "bearer"
+                }
+            },
+        },
+        "description": "Token fetched successfully"
+    },
+    401: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Incorrect email or password"
+                }
+            },
+        },
+        "description": "Invalid credentials"
+    }
+}
 
 SUPERUSER_SECRET_TOKEN = getenv("SUPERUSER_SECRET_TOKEN")
-
