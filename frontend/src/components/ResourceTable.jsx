@@ -54,10 +54,13 @@ export default function ResourceTable({scheduleId}) {
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const daysArray = Array.from({length: daysInMonth}, (_, i) => i + 1);
 
-    const getResourceForDay = (day) => {
+    const getResourceForDay = (employId, day) => {
         return resources.filter(resource => {
             const resourceDate = new Date(resource.datetime_started);
-            return resourceDate.getDate() === day && resourceDate.getMonth() === currentMonth && resourceDate.getFullYear() === currentYear;
+            return resource.employ_id === employId &&
+                resourceDate.getDate() === day &&
+                resourceDate.getMonth() === currentMonth &&
+                resourceDate.getFullYear() === currentYear;
         });
     };
 
@@ -109,13 +112,6 @@ export default function ResourceTable({scheduleId}) {
     };
 
     const handleResourceCreated = (newResource) => {
-        const updatedData = data.map(employ => {
-            if (employ.id === newResource.employ_id) {
-                return {...employ, resources: [...employ.resources, newResource]};
-            }
-            return employ;
-        });
-        setData(updatedData);
         setResources([...resources, newResource]);
     };
 
@@ -182,7 +178,7 @@ export default function ResourceTable({scheduleId}) {
                                 {daysArray.map(day => (
                                     <td key={day} className={isWeekend(day) ? 'weekend' : ''}
                                         onClick={() => handleCellClick(employ.id, day)}>
-                                        {getResourceForDay(day).map(resource => (
+                                        {getResourceForDay(employ.id, day).map(resource => (
                                             <div key={resource.id} className="resource">
                                                 {resource.name}
                                                 <div className="tooltip">

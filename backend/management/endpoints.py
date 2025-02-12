@@ -129,6 +129,8 @@ def get_all_resources(schedule_id: Optional[int] = None, current_user: User = De
             'datetime_ended': resource.datetime_ended,
             'schedule_id': resource.schedule_id,
             'user_id': resource.user_id,
+            'employ_id': resource.employ_id,
+            'resource_type': resource.resource_type,
             'created_at': resource.created_at,
             'updated_at': resource.updated_at
         }
@@ -149,7 +151,7 @@ def create_resource(resource: ResourceCreate, current_user: User = Depends(get_c
     start = resource.datetime_started
     end = resource.datetime_ended
     resource = Resource(name=resource.name, datetime_started=start, datetime_ended=end,
-                        schedule_id=resource.schedule_id, user_id=current_user.id)
+                        schedule_id=resource.schedule_id, user_id=current_user.id, employ_id=resource.employ_id, resource_type=resource.resource_type)
     db.add(resource)
     db.commit()
     db.refresh(resource)
@@ -160,6 +162,8 @@ def create_resource(resource: ResourceCreate, current_user: User = Depends(get_c
         'datetime_ended': resource.datetime_ended,
         'schedule_id': resource.schedule_id,
         'user_id': resource.user_id,
+        'employ_id': resource.employ_id,
+        'resource_type': resource.resource_type,
         'created_at': resource.created_at,
         'updated_at': resource.updated_at
     }
@@ -181,6 +185,8 @@ def get_resource(resource_id: int, current_user: User = Depends(get_current_user
         'datetime_ended': resource.datetime_ended,
         'schedule_id': resource.schedule_id,
         'user_id': resource.user_id,
+        'employ_id': resource.employ_id,
+        'resource_type': resource.resource_type,
         'created_at': resource.created_at,
         'updated_at': resource.updated_at
     }
