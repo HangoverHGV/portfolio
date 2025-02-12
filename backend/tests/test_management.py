@@ -199,4 +199,33 @@ class TestManagement:
             "updated_at": response.json()['updated_at']
         }
 
+    def test_get_one_resource(self, client_with_db):
+        response = client_with_db.get("/management/resources/1")
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+
+        # create user
+        user = self.create_user(client_with_db, user1)
+        # create resource
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        resource = self.create_resource(client_with_db, resource1, token)
+        # get resource
+        response = client_with_db.get("/management/resources/1",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "name": "Test Resource1",
+            "datetime_started": "2021-01-01T00:00:00",
+            "datetime_ended": "2021-01-01T01:00:00",
+            "schedule_id": 1,
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
+        response = client_with_db.get("/management/resources/2",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 404
+        assert response.json() == {"detail": "Resource not found"}
 

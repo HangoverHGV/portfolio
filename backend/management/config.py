@@ -161,3 +161,29 @@ CREATE_RESOURCE = {
     },
 }
 
+GET_ONE_RESOURCE = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "id": 1,
+                    "name": "Test Resource1",
+                    "datetime_started": "2021-01-01T00:00:00",
+                    "datetime_ended": "2021-01-01T01:00:00",
+                    "schedule_id": 1,
+                    "user_id": 1,
+                    "created_at": "2021-01-01T00:00:00",
+                    "updated_at": "2021-01-01T00:00:00"
+                }
+            },
+        },
+        "description": "Resource fetched successfully"
+    },
+    401: {
+        "description": "Not authenticated"
+    },
+    404: {
+        "description": "Resource not found"
+    },
+}
+

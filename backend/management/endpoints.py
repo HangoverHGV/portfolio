@@ -141,3 +141,23 @@ def create_resource(resource: ResourceCreate, current_user: User = Depends(get_c
     }
 
 
+@router.get("/resources/{resource_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=GET_ONE_RESOURCE)
+def get_resource(resource_id: int, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    resource = db.query(Resource).filter(Resource.id == resource_id).first()
+    if not resource:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found")
+
+    if not current_user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    return {
+        'id': resource.id,
+        'name': resource.name,
+        'datetime_started': resource.datetime_started,
+        'datetime_ended': resource.datetime_ended,
+        'schedule_id': resource.schedule_id,
+        'user_id': resource.user_id,
+        'created_at': resource.created_at,
+        'updated_at': resource.updated_at
+    }
+
