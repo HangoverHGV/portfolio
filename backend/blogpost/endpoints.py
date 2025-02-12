@@ -80,10 +80,7 @@ def edit_blogpost(blogpost_id: int, blogpost: BlogPostEdit, current_user: User =
     if not current_user.is_superuser and (not current_user.is_active or current_user.id != blogpost_db.user_id):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
-    if not blogpost_id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
-
-    if not blogpost:
+    if not blogpost_db:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog Post not found")
 
     if blogpost.title is not None:

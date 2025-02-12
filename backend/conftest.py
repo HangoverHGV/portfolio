@@ -5,6 +5,17 @@ from sqlalchemy.orm import sessionmaker
 from configs import get_db
 from main import app
 from database import Base
+import os
+
+
+def pytest_configure(config):
+    if len(config.args) == 1 and os.path.isfile(config.args[0]):
+        report_name = f"report_{os.path.basename(config.args[0]).replace('.py', '')}.html"
+    else:
+        report_name = "report_all_tests.html"
+
+    config.option.htmlpath = os.path.join("tests/reports", report_name)
+
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # Use an in-memory SQLite database for testing
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
@@ -38,3 +49,4 @@ def client_with_db(db_session):
     app.dependency_overrides[get_db] = override_get_db
     yield client
     app.dependency_overrides.clear()
+
