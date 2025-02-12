@@ -78,7 +78,7 @@ class TestManagement:
         user = self.create_user(client_with_db, user1)
         token = self.get_token(client_with_db, user1['email'], user1['password'])
         response = self.create_schedule(client_with_db, schedule1, token)
-        assert response.status_code == 200
+        assert response.status_code == 201
         assert response.json() == {
             "id": 1,
             "title": "Test Schedule1",
@@ -110,6 +110,33 @@ class TestManagement:
         }
 
         response = client_with_db.get("/management/schedules/2",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 404
+        assert response.json() == {"detail": "Schedule not found"}
+
+    def test_edit_schedule(self, client_with_db):
+        response = client_with_db.put("/management/schedules/1", json={"title": "New Title"})
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+
+        # create user
+        user = self.create_user(client_with_db, user1)
+        # create schedule
+        token = self.get_token(client_with_db, user1['email'], user1['password'])
+        schedule = self.create_schedule(client_with_db, schedule1, token)
+        # edit schedule
+        response = client_with_db.put("/management/schedules/1", json={"title": "New Title"},
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 200
+        assert response.json() == {
+            "id": 1,
+            "title": "New Title",
+            "user_id": 1,
+            "created_at": response.json()['created_at'],
+            "updated_at": response.json()['updated_at']
+        }
+
+        response = client_with_db.put("/management/schedules/2", json={"title": "New Title"},
                                       headers={"Authorization": f"Bearer {token.json()['access_token']}"})
         assert response.status_code == 404
         assert response.json() == {"detail": "Schedule not found"}

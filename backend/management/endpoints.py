@@ -30,7 +30,7 @@ def get_all_schedules(current_user: User = Depends(get_current_user), db: Sessio
         for schedule in schedules
     ]
 
-@router.post("/schedules", tags=["management"], status_code=status.HTTP_200_OK, responses=CREATE_SCHEDULE)
+@router.post("/schedules", tags=["management"], status_code=status.HTTP_201_CREATED, responses=CREATE_SCHEDULE)
 def create_schedule(schedule: ScheduleCreate, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
     if not current_user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
@@ -58,3 +58,24 @@ def get_one_schedule(schedule_id: int, current_user: User = Depends(get_current_
         'updated_at': schedule.updated_at
     }
 
+@router.put("/schedules/{schedule_id}", tags=["management"], status_code=status.HTTP_200_OK, responses=EDIT_SCHEDULE)
+def edit_schedule(schedule_id: int, schedule: ScheduleEdit, current_user: User = Depends(get_current_user), db: SessionLocal = Depends(get_db)):
+    schedule_db = db.query(Schedule).filter(Schedule.id == schedule_id).first()
+    if not schedule_db:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
+
+    if not current_user.is_superuser and (not current_user.is_active or current_user.id != schedule_db.user_id):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+
+    if schedule.title is not None:
+        schedule_db.title = schedule.title
+
+    db.commit()
+    db.refresh(schedule_db)
+    return {
+        'id': schedule_db.id,
+        'title': schedule_db.title,
+        'user_id': schedule_db.user_id,
+        'created_at': schedule_db.created_at,
+        'updated_at': schedule_db.updated_at
+    }
