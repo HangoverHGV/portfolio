@@ -68,6 +68,9 @@ class Schedule(Base):
     title = Column(String, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
 
+    created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc), onupdate=datetime.datetime.now(datetime.timezone.utc))
+
     resources = relationship("Resource", back_populates="schedule", cascade="all, delete-orphan")
 
 
