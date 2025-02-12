@@ -2,6 +2,8 @@
 Tests for the Management API endpoints using FastAPI TestClient and an in-memory SQLite database.
 
 """
+from http.client import responses
+
 from conftest import client_with_db
 
 user1 = {
@@ -86,6 +88,10 @@ class TestManagement:
         }
 
     def test_get_one_schedule(self, client_with_db):
+        response = client_with_db.get("/management/schedules/1")
+        assert response.status_code == 401
+        assert response.json() == {"detail": "Not authenticated"}
+
         # create user
         user = self.create_user(client_with_db, user1)
         # create schedule
@@ -102,5 +108,10 @@ class TestManagement:
             "created_at": response.json()['created_at'],
             "updated_at": response.json()['updated_at']
         }
+
+        response = client_with_db.get("/management/schedules/2",
+                                      headers={"Authorization": f"Bearer {token.json()['access_token']}"})
+        assert response.status_code == 404
+        assert response.json() == {"detail": "Schedule not found"}
 
 
