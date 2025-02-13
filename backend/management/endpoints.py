@@ -215,10 +215,10 @@ def edit_respurce(resource_id: int, resource: ResourceEdit, current_user: User =
         resource_db.name = resource.name
 
     if resource.datetime_started is not None:
-        resource_db.datetime_started = datetime.strptime(resource["datetime_started"], "%Y-%m-%dT%H:%M:%S")
+        resource_db.datetime_started = resource.datetime_started
 
     if resource.datetime_ended is not None:
-        resource_db.datetime_ended = datetime.strptime(resource["datetime_ended"], "%Y-%m-%dT%H:%M:%S")
+        resource_db.datetime_ended = resource.datetime_ended
 
     db.commit()
     db.refresh(resource_db)
