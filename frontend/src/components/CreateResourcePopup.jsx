@@ -4,7 +4,9 @@ import "./styles/Modal.css";
 export default function CreateResourcePopup({
                                                 onClose,
                                                 onResourceCreated,
+                                                onResourceUpdated,
                                                 scheduleId,
+                                                resource,
                                                 employId,
                                                 day,
                                                 currentMonth,
@@ -18,9 +20,16 @@ export default function CreateResourcePopup({
     const [resourceType, setResourceType] = useState("work");
 
     useEffect(() => {
-        setDatetimeStarted(defaultStartTime);
-        setDatetimeEnded(defaultEndTime);
-    }, [defaultStartTime, defaultEndTime]);
+        if (resource) {
+            setName(resource.name);
+            setDatetimeStarted(new Date(resource.datetime_started).toISOString().slice(0, 16));
+            setDatetimeEnded(new Date(resource.datetime_ended).toISOString().slice(0, 16));
+            setResourceType(resource.resource_type);
+        } else {
+            setDatetimeStarted(defaultStartTime);
+            setDatetimeEnded(defaultEndTime);
+        }
+    }, [resource, defaultStartTime, defaultEndTime]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,25 +47,35 @@ export default function CreateResourcePopup({
             employ_id: employId,
             resource_type: resourceType
         };
+
         try {
-            const response = await fetch("http://127.0.0.1:8000/management/resources", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('access_token')}`
-                },
-                body: JSON.stringify(newResource)
-            });
+            const response = resource
+                ? await fetch(`http://127.0.0.1:8000/management/resources/${resource.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    body: JSON.stringify(newResource)
+                })
+                : await fetch("http://127.0.0.1:8000/management/resources", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    body: JSON.stringify(newResource)
+                });
 
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
 
             const result = await response.json();
-            onResourceCreated(result);
+            resource ? onResourceUpdated(result) : onResourceCreated(result);
             onClose();
         } catch (error) {
-            console.error("There was an error creating the resource!", error);
+            console.error("There was an error creating/updating the resource!", error);
         }
     };
 
@@ -64,7 +83,7 @@ export default function CreateResourcePopup({
         <div className="modal-overlay">
             <div className="modal">
                 <button className="close-button" onClick={onClose}>×</button>
-                <h2>Create Resource</h2>
+                <h2>{resource ? "Edit Resource" : "Create Resource"}</h2>
                 <form onSubmit={handleSubmit}>
                     <label>
                         Resource Type:
@@ -87,7 +106,7 @@ export default function CreateResourcePopup({
                         <input type="datetime-local" value={datetimeEnded}
                                onChange={(e) => setDatetimeEnded(e.target.value)} required/>
                     </label>
-                    <button type="submit">Create</button>
+                    <button type="submit">{resource ? "Update" : "Create"} Resource</button>
                     <button type="button" onClick={onClose}>Cancel</button>
                 </form>
             </div>

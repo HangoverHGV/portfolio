@@ -82,6 +82,11 @@
     padding: 5px 10px;
     border-radius: 10px;
     margin: 5px;
+    cursor: default;
+}
+
+.resource:hover{
+    background-color: #5C8374;
 }
 
 .resource .tooltip {

@@ -10,6 +10,7 @@ export default function ResourceTable({scheduleId}) {
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [isEmployPopupOpen, setIsEmployPopupOpen] = useState(false);
     const [isResourcePopupOpen, setIsResourcePopupOpen] = useState(false);
+    const [selectedResource, setSelectedResource] = useState(null);
     const [selectedCell, setSelectedCell] = useState(null);
 
     useEffect(() => {
@@ -103,16 +104,32 @@ export default function ResourceTable({scheduleId}) {
             defaultStartTime: formatDate(defaultStartTime),
             defaultEndTime: formatDate(defaultEndTime)
         });
+        setSelectedResource(null);
+        setIsResourcePopupOpen(true);
+    };
+
+    const handleResourceClick = (e, resource) => {
+        e.stopPropagation();
+        setSelectedResource(resource);
+        setSelectedCell(null);
         setIsResourcePopupOpen(true);
     };
 
     const handleCloseResourcePopup = () => {
         setIsResourcePopupOpen(false);
+        setSelectedResource(null);
         setSelectedCell(null);
     };
 
     const handleResourceCreated = (newResource) => {
         setResources([...resources, newResource]);
+    };
+
+    const handleResourceUpdated = (updatedResource) => {
+        const updatedResources = resources.map(resource =>
+            resource.id === updatedResource.id ? updatedResource : resource
+        );
+        setResources(updatedResources);
     };
 
     const getDayName = (day) => {
@@ -137,17 +154,19 @@ export default function ResourceTable({scheduleId}) {
                         scheduleId={scheduleId}
                     />
                 )}
-                {isResourcePopupOpen && selectedCell && (
+                {isResourcePopupOpen && (
                     <CreateResourcePopup
                         onClose={handleCloseResourcePopup}
                         onResourceCreated={handleResourceCreated}
+                        onResourceUpdated={handleResourceUpdated}
                         scheduleId={scheduleId}
-                        employId={selectedCell.employId}
-                        day={selectedCell.day}
+                        resource={selectedResource}
+                        employId={selectedCell?.employId}
+                        day={selectedCell?.day}
                         currentMonth={currentMonth}
                         currentYear={currentYear}
-                        defaultStartTime={selectedCell.defaultStartTime}
-                        defaultEndTime={selectedCell.defaultEndTime}
+                        defaultStartTime={selectedCell?.defaultStartTime}
+                        defaultEndTime={selectedCell?.defaultEndTime}
                     />
                 )}
             </div>
@@ -179,7 +198,8 @@ export default function ResourceTable({scheduleId}) {
                                     <td key={day} className={isWeekend(day) ? 'weekend' : ''}
                                         onClick={() => handleCellClick(employ.id, day)}>
                                         {getResourceForDay(employ.id, day).map(resource => (
-                                            <div key={resource.id} className="resource">
+                                            <div key={resource.id} className="resource"
+                                                 onClick={(e) => handleResourceClick(e, resource)}>
                                                 {resource.name}
                                                 <div className="tooltip">
                                                     Start: {new Date(resource.datetime_started).toLocaleString()}<br/>
