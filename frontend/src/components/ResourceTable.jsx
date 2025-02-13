@@ -132,7 +132,6 @@ export default function ResourceTable({scheduleId}) {
             resource.id === updatedResource.id ? updatedResource : resource
         );
         setResources(updatedResources);
-
     };
 
     const getDayName = (day) => {
@@ -146,41 +145,51 @@ export default function ResourceTable({scheduleId}) {
         return dayOfWeek === 0 || dayOfWeek === 6;
     };
 
-const renderResources = (resources, employId, day) => {
-    if (resources.length === 0) {
-        return <td key={`${employId}-${day}`} onClick={() => handleCellClick(employId, day)}></td>;
-    }
+    const renderResources = (resourcesForDay, employId, day) => {
+        const spanningResources = resourcesForDay.filter(resource => {
+            const startDate = new Date(resource.datetime_started);
+            return startDate.getDate() === day;
+        });
 
-    const multiDayResource = resources.find(resource => {
-        const startDate = new Date(resource.datetime_started);
-        const endDate = new Date(resource.datetime_ended);
-        return startDate.getDate() === day && endDate.getDate() > day;
-    });
+        if (spanningResources.length > 0) {
+            const resource = spanningResources[0];
+            const startDate = new Date(resource.datetime_started);
+            const endDate = new Date(resource.datetime_ended);
+            const spanDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
+            const isSpanning = spanDays > 1;
 
-    if (multiDayResource) {
-        const startDate = new Date(multiDayResource.datetime_started);
-        const endDate = new Date(multiDayResource.datetime_ended);
-        const startDay = startDate.getDate();
-        const endDay = endDate.getDate();
-        const colspan = endDay - startDay + 1;
-
-        if (colspan > 1) {
             return (
-                <td key={`${employId}-${day}`} colSpan={colspan} onClick={() => handleCellClick(employId, day)}>
-                    <div key={multiDayResource.id} className={`resource span`} onClick={(e) => handleResourceClick(e, multiDayResource)}>
-                        {multiDayResource.name}
-                        <div className="tooltip">
-                            Start: {multiDayResource.datetime_started}<br/>
-                            End: {multiDayResource.datetime_ended}
-                        </div>
-                    </div>
-                </td>
-            );
-        }
-    }
+                <div key={`${employId}-${day}`} className="grid-cell"
+                     style={{gridColumn: isSpanning ? `span ${spanDays}` : 'span 1'}}
+                     onClick={() => handleCellClick(employId, day)}>
+                    {resourcesForDay.map((resource, index) => {
+                        const resourceStartDate = new Date(resource.datetime_started);
+                        const resourceEndDate = new Date(resource.datetime_ended);
+                        const resourceSpanDays = (resourceEndDate - resourceStartDate) / (1000 * 60 * 60 * 24) + 1;
+                        const resourceIsSpanning = resourceSpanDays > 1;
 
-    return <td key={`${employId}-${day}`} onClick={() => handleCellClick(employId, day)}></td>;
-};
+                        return (
+                            <div
+                                key={resource.id}
+                                className={`resource ${resourceIsSpanning && index === 0 ? 'span' : ''}`}
+                                style={{gridColumn: resourceIsSpanning ? `span ${resourceSpanDays}` : 'span 1'}}
+                                onClick={(e) => handleResourceClick(e, resource)}
+                            >
+                                {resource.name}
+                                <div className="tooltip">
+                                    Start: {resource.datetime_started}<br/>
+                                    End: {resource.datetime_ended}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        } else {
+            return <div key={`${employId}-${day}`} className="grid-cell"
+                        onClick={() => handleCellClick(employId, day)}></div>;
+        }
+    };
 
     return (
         <>
@@ -215,36 +224,33 @@ const renderResources = (resources, employId, day) => {
                     <span>{new Date(currentYear, currentMonth).toLocaleString('default', {month: 'long'})} {currentYear}</span>
                     <button onClick={() => handleMonthChange("next")}>Next Month</button>
                 </div>
-                <div className="resourceTable">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Employee Name</th>
-                            {daysArray.map(day => (
-                                <th key={day} className={isWeekend(day) ? 'weekend' : ''}>
-                                    {day}
-                                    <br/>
-                                    {getDayName(day)}
-                                </th>
-                            ))}
-                        </tr>
-                        </thead>
-                        <tbody>
+                <div className="resourceTable"
+                     style={{gridTemplateColumns: `auto repeat(${daysInMonth}, minmax(100px, 1fr))`}}>
+                    <div className="grid-header">
+                        <div className="grid-header-cell">Employee Name</div>
+                        {daysArray.map(day => (
+                            <div key={day} className={`grid-header-cell ${isWeekend(day) ? 'weekend' : ''}`}>
+                                {day}
+                                <br/>
+                                {getDayName(day)}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="grid-body">
                         {data.map(employ => (
-                            <tr key={employ.id}>
-                                <td>{employ.name}</td>
+                            <React.Fragment key={employ.id}>
+                                <div className="employ">{employ.name}</div>
                                 {daysArray.map(day => {
                                     const resourcesForDay = getResourceForDay(employ.id, day);
                                     if (resourcesForDay.length > 0) {
                                         return renderResources(resourcesForDay, employ.id, day);
                                     }
-                                    return <td key={day} className={isWeekend(day) ? 'weekend' : ''}
-                                               onClick={() => handleCellClick(employ.id, day)}></td>;
+                                    return <div key={day} className={`grid-cell ${isWeekend(day) ? 'weekend' : ''}`}
+                                                onClick={() => handleCellClick(employ.id, day)}></div>;
                                 })}
-                            </tr>
+                            </React.Fragment>
                         ))}
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
             </div>
         </>
