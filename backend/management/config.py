@@ -233,3 +233,124 @@ DELETE_RESOURCE = {
         "description": "Resource not found"
     },
 }
+
+GET_ALL_EMPLOY = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": [
+                    {
+                        "id": 1,
+                        "name": "Employ 1",
+                        "schedule_id": 1,
+                        "resources":[1, 2 ,3],
+                        "created_at": "2021-01-01T00:00:00",
+                        "updated_at": "2021-01-01T00:00:00"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Employ 2",
+                        "schedule_id": 2,
+                        "resources":[4, 5 ,6],
+                        "created_at": "2021-01-01T00:00:00",
+                        "updated_at": "2021-01-01T00:00:00"
+                    }
+                ]
+            },
+        },
+        "description": "Employs fetched successfully"
+    },
+    401:{
+        "description": "Not authenticated"
+    }
+}
+
+CREATE_EMPLOY = {
+    201: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "name": "Employ 1",
+                    "schedule_id": 1,
+                    "resources":[1, 2 ,3],
+                    "created_at": "2021-01-01T00:00:00",
+                    "updated_at": "2021-01-01T00:00:00"
+                }
+            },
+        },
+        "description": "Employ created successfully"
+    },
+    401:{
+        "description": "Not authenticated"
+    },
+    404:{
+        "description": "Schedule or Resource not found"
+    }
+}
+
+GET_ONE_EMPLOY = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "id": 1,
+                    "name": "Employ 1",
+                    "schedule_id": 1,
+                    "resources":[1, 2 ,3],
+                    "created_at": "2021-01-01T00:00:00",
+                    "updated_at": "2021-01-01T00:00:00"
+                }
+            },
+        },
+        "description": "Employ fetched successfully"
+    },
+    401:{
+        "description": "Not authenticated"
+    },
+    404:{
+        "description": "Employ not found"
+    }
+}
+
+EDIT_EMPLOY = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "name": "Employ 1",
+                    "schedule_id": 1,
+                    "resources":[1, 2 ,3],
+                    "created_at": "2021-01-01T00:00:00",
+                    "updated_at": "2021-01-01T00:00:00"
+                }
+            },
+        },
+        "description": "Employ updated successfully"
+    },
+    401:{
+        "description": "Not authenticated"
+    },
+    404:{
+        "description": "Employ not found"
+    }
+}
+
+DELETE_EMPLOY = {
+    200: {
+        "content": {
+            "application/json": {
+                "example": {
+                    "detail": "Employ deleted successfully"
+                }
+            },
+        },
+        "description": "Employ deleted successfully"
+    },
+    401:{
+        "description": "Not authenticated"
+    },
+    404:{
+        "description": "Employ not found"
+    }
+}
+

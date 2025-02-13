@@ -53,6 +53,9 @@ export default function Navbar() {
                 {isLoggedIn ? (
                     <>
                         <li>
+                            <a href="/planning">Planning</a>
+                        </li>
+                        <li>
                             <a href="/user">{username}</a>
                         </li>
                         <li className="logout">
