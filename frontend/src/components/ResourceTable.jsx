@@ -14,54 +14,55 @@ export default function ResourceTable({scheduleId}) {
     const [selectedCell, setSelectedCell] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`http://127.0.0.1:8000/management/employ?schedule_id=${scheduleId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                const result = await response.json();
-                setData(result);
-            } catch (error) {
-                console.error("There was an error fetching the employ data!", error);
-            }
-        };
-
-        const fetchResources = async () => {
-            try {
-                const response = await fetch(`http://127.0.0.1:8000/management/resources?schedule_id=${scheduleId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                const result = await response.json();
-                setResources(result);
-            } catch (error) {
-                console.error("There was an error fetching the resources!", error);
-            }
-        };
-
         fetchData();
         fetchResources();
     }, [scheduleId]);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/management/employ?schedule_id=${scheduleId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const result = await response.json();
+            setData(result);
+        } catch (error) {
+            console.error("There was an error fetching the employ data!", error);
+        }
+    };
+
+    const fetchResources = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/management/resources?schedule_id=${scheduleId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const result = await response.json();
+            setResources(result);
+        } catch (error) {
+            console.error("There was an error fetching the resources!", error);
+        }
+    };
 
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const daysArray = Array.from({length: daysInMonth}, (_, i) => i + 1);
 
     const getResourceForDay = (employId, day) => {
         return resources.filter(resource => {
-            const resourceDate = new Date(resource.datetime_started);
+            const startDate = new Date(resource.datetime_started);
+            const endDate = new Date(resource.datetime_ended);
             return resource.employ_id === employId &&
-                resourceDate.getDate() === day &&
-                resourceDate.getMonth() === currentMonth &&
-                resourceDate.getFullYear() === currentYear;
+                ((startDate.getDate() <= day && endDate.getDate() >= day) &&
+                    (startDate.getMonth() === currentMonth && endDate.getMonth() === currentMonth) &&
+                    (startDate.getFullYear() === currentYear && endDate.getFullYear() === currentYear));
         });
     };
 
@@ -95,9 +96,9 @@ export default function ResourceTable({scheduleId}) {
         defaultEndTime.setHours(16, 30);
 
         const formatDate = (date) => {
-            return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+            const pad = (num) => num.toString().padStart(2, '0');
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
         };
-
         setSelectedCell({
             employId,
             day,
@@ -119,6 +120,7 @@ export default function ResourceTable({scheduleId}) {
         setIsResourcePopupOpen(false);
         setSelectedResource(null);
         setSelectedCell(null);
+        fetchResources();
     };
 
     const handleResourceCreated = (newResource) => {
@@ -130,6 +132,7 @@ export default function ResourceTable({scheduleId}) {
             resource.id === updatedResource.id ? updatedResource : resource
         );
         setResources(updatedResources);
+
     };
 
     const getDayName = (day) => {
@@ -142,6 +145,42 @@ export default function ResourceTable({scheduleId}) {
         const dayOfWeek = date.getDay();
         return dayOfWeek === 0 || dayOfWeek === 6;
     };
+
+const renderResources = (resources, employId, day) => {
+    if (resources.length === 0) {
+        return <td key={`${employId}-${day}`} onClick={() => handleCellClick(employId, day)}></td>;
+    }
+
+    const multiDayResource = resources.find(resource => {
+        const startDate = new Date(resource.datetime_started);
+        const endDate = new Date(resource.datetime_ended);
+        return startDate.getDate() === day && endDate.getDate() > day;
+    });
+
+    if (multiDayResource) {
+        const startDate = new Date(multiDayResource.datetime_started);
+        const endDate = new Date(multiDayResource.datetime_ended);
+        const startDay = startDate.getDate();
+        const endDay = endDate.getDate();
+        const colspan = endDay - startDay + 1;
+
+        if (colspan > 1) {
+            return (
+                <td key={`${employId}-${day}`} colSpan={colspan} onClick={() => handleCellClick(employId, day)}>
+                    <div key={multiDayResource.id} className={`resource span`} onClick={(e) => handleResourceClick(e, multiDayResource)}>
+                        {multiDayResource.name}
+                        <div className="tooltip">
+                            Start: {multiDayResource.datetime_started}<br/>
+                            End: {multiDayResource.datetime_ended}
+                        </div>
+                    </div>
+                </td>
+            );
+        }
+    }
+
+    return <td key={`${employId}-${day}`} onClick={() => handleCellClick(employId, day)}></td>;
+};
 
     return (
         <>
@@ -194,21 +233,14 @@ export default function ResourceTable({scheduleId}) {
                         {data.map(employ => (
                             <tr key={employ.id}>
                                 <td>{employ.name}</td>
-                                {daysArray.map(day => (
-                                    <td key={day} className={isWeekend(day) ? 'weekend' : ''}
-                                        onClick={() => handleCellClick(employ.id, day)}>
-                                        {getResourceForDay(employ.id, day).map(resource => (
-                                            <div key={resource.id} className="resource"
-                                                 onClick={(e) => handleResourceClick(e, resource)}>
-                                                {resource.name}
-                                                <div className="tooltip">
-                                                    Start: {new Date(resource.datetime_started).toLocaleString()}<br/>
-                                                    End: {new Date(resource.datetime_ended).toLocaleString()}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </td>
-                                ))}
+                                {daysArray.map(day => {
+                                    const resourcesForDay = getResourceForDay(employ.id, day);
+                                    if (resourcesForDay.length > 0) {
+                                        return renderResources(resourcesForDay, employ.id, day);
+                                    }
+                                    return <td key={day} className={isWeekend(day) ? 'weekend' : ''}
+                                               onClick={() => handleCellClick(employ.id, day)}></td>;
+                                })}
                             </tr>
                         ))}
                         </tbody>

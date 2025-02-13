@@ -14,16 +14,16 @@ export default function CreateResourcePopup({
                                                 defaultStartTime,
                                                 defaultEndTime
                                             }) {
-    const [name, setName] = useState("");
-    const [datetimeStarted, setDatetimeStarted] = useState(defaultStartTime);
-    const [datetimeEnded, setDatetimeEnded] = useState(defaultEndTime);
-    const [resourceType, setResourceType] = useState("work");
+    const [name, setName] = useState(resource ? resource.name : "");
+    const [datetimeStarted, setDatetimeStarted] = useState(resource ? resource.datetime_started : defaultStartTime);
+    const [datetimeEnded, setDatetimeEnded] = useState(resource ? resource.datetime_ended : defaultEndTime);
+    const [resourceType, setResourceType] = useState(resource ? resource.resource_type : "work");
 
     useEffect(() => {
         if (resource) {
             setName(resource.name);
-            setDatetimeStarted(new Date(resource.datetime_started).toISOString().slice(0, 16));
-            setDatetimeEnded(new Date(resource.datetime_ended).toISOString().slice(0, 16));
+            setDatetimeStarted(resource.datetime_started);
+            setDatetimeEnded(resource.datetime_ended);
             setResourceType(resource.resource_type);
         } else {
             setDatetimeStarted(defaultStartTime);
@@ -34,15 +34,10 @@ export default function CreateResourcePopup({
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const convertToUTC = (datetime) => {
-            const date = new Date(datetime);
-            return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
-        };
-
         const newResource = {
             name,
-            datetime_started: convertToUTC(datetimeStarted),
-            datetime_ended: convertToUTC(datetimeEnded),
+            datetime_started: datetimeStarted,
+            datetime_ended: datetimeEnded,
             schedule_id: scheduleId,
             employ_id: employId,
             resource_type: resourceType
@@ -79,6 +74,24 @@ export default function CreateResourcePopup({
         }
     };
 
+    const onDelete = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/management/resources/${resource.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('access_token')}`
+                },
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            onClose();
+        } catch (error) {
+            console.error("There was an error deleting the resource!", error);
+        }
+    };
+
     return (
         <div className="modal-overlay">
             <div className="modal">
@@ -108,6 +121,7 @@ export default function CreateResourcePopup({
                     </label>
                     <button type="submit">{resource ? "Update" : "Create"} Resource</button>
                     <button type="button" onClick={onClose}>Cancel</button>
+                    {resource && <button type="button" onClick={onDelete}>Delete</button>}
                 </form>
             </div>
         </div>
