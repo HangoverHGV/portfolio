@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import Navbar from "../components/NavBar";
 import styles from "../components/styles/Blog.module.css";
+import root_url from "../components/RootURL";
 
 export default function Blog() {
     const [blogPosts, setBlogPosts] = useState([]);
@@ -16,7 +17,7 @@ export default function Blog() {
         setIsLoggedIn(!!token);
 
         // Fetch all users
-        fetch(`${process.env.REACT_APP_API_URL}/user/`)
+        fetch(`${root_url}/user/`)
             .then(response => response.json())
             .then(data => {
                 if (Array.isArray(data)) {
@@ -31,7 +32,7 @@ export default function Blog() {
 
     useEffect(() => {
         // Fetch blog posts based on selected user ID
-        let url = `${process.env.REACT_APP_API_URL}/blogpost/`;
+        let url = `${root_url}/blogpost/`;
         if (selectedUserId) {
             url += `?user_id=${selectedUserId}`;
         }
