@@ -10,7 +10,7 @@ export default function LoginForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = "http://127.0.0.1:8000/user/token";
+        const url = `${process.env.REACT_APP_API_URL}/user/token`;
         const formData = new URLSearchParams();
         formData.append("username", username);
         formData.append("password", password);

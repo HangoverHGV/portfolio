@@ -13,7 +13,7 @@ export default function AdminTable() {
         setToken(storedToken);
 
         // Fetch all users
-        fetch("http://127.0.0.1:8000/user/", {
+        fetch(`${process.env.REACT_APP_API_URL}/user/`, {
             headers: {
                 "Authorization": `Bearer ${storedToken}`
             }
@@ -23,7 +23,7 @@ export default function AdminTable() {
             .catch(error => console.error("Error fetching users:", error));
 
         // Fetch all posts
-        fetch("http://127.0.0.1:8000/blogpost/", {
+        fetch(`${process.env.REACT_APP_API_URL}/blogpost/`, {
             headers: {
                 "Authorization": `Bearer ${storedToken}`
             }
@@ -36,7 +36,7 @@ export default function AdminTable() {
     const handleDeleteUser = (userId) => {
         const token = localStorage.getItem("access_token");
         if (window.confirm("Are you sure you want to delete this user?")) {
-            fetch(`http://127.0.0.1:8000/user/${userId}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -56,7 +56,7 @@ export default function AdminTable() {
 
     const handleDeletePost = (postId) => {
         if (window.confirm("Are you sure you want to delete this post?")) {
-            fetch(`http://127.0.0.1:8000/blogpost/${postId}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`

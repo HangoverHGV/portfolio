@@ -12,7 +12,7 @@ export default function EditUser() {
     useEffect(() => {
         const token = localStorage.getItem("access_token");
 
-        fetch(`http://127.0.0.1:8000/user/${userId}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -31,7 +31,7 @@ export default function EditUser() {
         const token = localStorage.getItem("access_token");
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/user/${userId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

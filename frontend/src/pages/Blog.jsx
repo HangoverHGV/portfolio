@@ -16,7 +16,7 @@ export default function Blog() {
         setIsLoggedIn(!!token);
 
         // Fetch all users
-        fetch("http://127.0.0.1:8000/user/")
+        fetch(`${process.env.REACT_APP_API_URL}/user/`)
             .then(response => response.json())
             .then(data => {
                 if (Array.isArray(data)) {
@@ -31,7 +31,7 @@ export default function Blog() {
 
     useEffect(() => {
         // Fetch blog posts based on selected user ID
-        let url = "http://127.0.0.1:8000/blogpost/";
+        let url = `${process.env.REACT_APP_API_URL}/blogpost/`;
         if (selectedUserId) {
             url += `?user_id=${selectedUserId}`;
         }

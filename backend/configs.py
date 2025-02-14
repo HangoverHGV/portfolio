@@ -39,9 +39,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/token")
 
 # FastAPI app
 app = FastAPI(swagger_ui_parameters=SWAGGER_UI_PARAMETERS, swagger_ui_init_oauth=SWAGGER_UI_INIT_OAUTH,
-              title="Stocks API",
-              description="API for stocks management",
-              openapi_schema=oauth2_scheme)
+              title="My Portfolio API",
+              description="API for my portfolio",
+              openapi_schema=oauth2_scheme,
+              version="2.0",
+              )
 
 # CORS CONFIG
 origins = [

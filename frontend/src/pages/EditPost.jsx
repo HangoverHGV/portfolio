@@ -12,7 +12,7 @@ export default function EditPost() {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/blogpost/${postId}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`);
                 const data = await response.json();
                 setPost(data);
                 setContent(data.content);
@@ -28,7 +28,7 @@ export default function EditPost() {
         const token = localStorage.getItem("access_token");
         if (token) {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/blogpost/${postId}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",

@@ -12,7 +12,7 @@ export default function Post() {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/blogpost/${postId}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`);
                 const data = await response.json();
                 setPost(data);
             } catch (error) {
@@ -24,7 +24,7 @@ export default function Post() {
             const token = localStorage.getItem("access_token");
             if (token) {
                 try {
-                    const response = await fetch("http://127.0.0.1:8000/user/my/user", {
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/my/user`, {
                         method: "GET",
                         headers: {
                             "Authorization": `Bearer ${token}`
@@ -48,7 +48,7 @@ export default function Post() {
         const token = localStorage.getItem("access_token");
         if (token) {
             try {
-                const response = await fetch(`http://127.0.0.1:8000/blogpost/${postId}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`, {
                     method: "DELETE",
                     headers: {
                         "Authorization": `Bearer ${token}`
