@@ -26,7 +26,6 @@ export default function SignupForm() {
 
             if (response.status === 201) {
                 const data = await response.json();
-                console.log("User created successfully:", data);
                 navigate("/login"); // Redirect to login page after successful signup
             } else if (response.status === 400) {
                 const error = await response.json();

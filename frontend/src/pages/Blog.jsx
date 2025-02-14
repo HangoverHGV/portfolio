@@ -22,7 +22,6 @@ export default function Blog() {
             .then(data => {
                 if (Array.isArray(data)) {
                     setUsers(data);
-                    console.log(data);
                 } else {
                     console.error("Error: Users data is not an array");
                 }

@@ -27,7 +27,6 @@ export default function LoginForm() {
 
             if (response.status === 200) {
                 const data = await response.json();
-                console.log("Login successful:", data);
                 localStorage.setItem("access_token", data.access_token);
                 navigate("/"); // Redirect to home page after successful login
             } else {
