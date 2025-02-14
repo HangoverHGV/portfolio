@@ -6,8 +6,8 @@ from configs import app
 from user.endpoints import router as user_router
 from blogpost.endpoints import router as blogpost_router
 
-app.include_router(user_router, prefix="/api/v1/user")
-app.include_router(blogpost_router, prefix="/api/v1/blogpost")
+app.include_router(user_router, prefix="/user")
+app.include_router(blogpost_router, prefix="/blogpost")
 
 
 

@@ -10,7 +10,6 @@ from database import SessionLocal, engine
 from user import models
 from os import getenv
 
-
 # JWT CONFIG
 SECRET_KEY = getenv("SECRET_KEY")
 ALGORITHM = "HS256"
@@ -43,6 +42,10 @@ app = FastAPI(swagger_ui_parameters=SWAGGER_UI_PARAMETERS, swagger_ui_init_oauth
               description="API for my portfolio",
               openapi_schema=oauth2_scheme,
               version="2.0",
+              root_path='/api/v1',
+              docs_url="/docs",
+              openapi_url="/openapi.json",
+              redoc_url=None,
               )
 
 # CORS CONFIG
@@ -62,9 +65,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Create tables
 models.Base.metadata.create_all(bind=engine)
+
 
 # Dependency to get DB
 def get_db():
