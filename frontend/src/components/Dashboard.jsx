@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import styles from "./styles/Dashboard.module.css";
 import AdminTable from "./AdminTable";
+import root_url from "./RootURL";
 
 export default function Dashboard() {
     const [userData, setUserData] = useState({name: "", email: "", password: ""});
@@ -14,7 +15,7 @@ export default function Dashboard() {
             const token = localStorage.getItem("access_token");
             if (token) {
                 try {
-                    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/my/user`, {
+                    const response = await fetch(`${root_url}/user/my/user`, {
                         method: "GET",
                         headers: {
                             "Authorization": `Bearer ${token}`

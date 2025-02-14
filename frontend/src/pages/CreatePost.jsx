@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import RichTextEditor from "../components/RichTextEditor";
 import styles from "../components/styles/CreatePost.module.css";
 import Navbar from "../components/NavBar";
+import root_url from "../components/RootURL";
 
 export default function CreatePost() {
     const [title, setTitle] = useState("");
@@ -15,7 +16,7 @@ export default function CreatePost() {
         const token = localStorage.getItem("access_token");
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/`, {
+            const response = await fetch(`${root_url}/blogpost/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

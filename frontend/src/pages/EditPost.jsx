@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import RichTextEditor from "../components/RichTextEditor";
 import Navbar from "../components/NavBar";
+import root_url from "../components/RootURL";
 
 export default function EditPost() {
     const {postId} = useParams();
@@ -12,7 +13,7 @@ export default function EditPost() {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`);
+                const response = await fetch(`${root_url}/blogpost/${postId}`);
                 const data = await response.json();
                 setPost(data);
                 setContent(data.content);
@@ -28,7 +29,7 @@ export default function EditPost() {
         const token = localStorage.getItem("access_token");
         if (token) {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`, {
+                const response = await fetch(`${root_url}/blogpost/${postId}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",

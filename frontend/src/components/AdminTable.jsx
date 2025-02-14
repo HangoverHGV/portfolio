@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import styles from "./styles/AdminTable.module.css";
+import root_url from "./RootURL";
 
 export default function AdminTable() {
     const [allUsers, setAllUsers] = useState([]);
@@ -13,7 +14,7 @@ export default function AdminTable() {
         setToken(storedToken);
 
         // Fetch all users
-        fetch(`${process.env.REACT_APP_API_URL}/user/`, {
+        fetch(`${root_url}/user/`, {
             headers: {
                 "Authorization": `Bearer ${storedToken}`
             }
@@ -23,7 +24,7 @@ export default function AdminTable() {
             .catch(error => console.error("Error fetching users:", error));
 
         // Fetch all posts
-        fetch(`${process.env.REACT_APP_API_URL}/blogpost/`, {
+        fetch(`${root_url}/blogpost/`, {
             headers: {
                 "Authorization": `Bearer ${storedToken}`
             }
@@ -36,7 +37,7 @@ export default function AdminTable() {
     const handleDeleteUser = (userId) => {
         const token = localStorage.getItem("access_token");
         if (window.confirm("Are you sure you want to delete this user?")) {
-            fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
+            fetch(`${root_url}/user/${userId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -56,7 +57,7 @@ export default function AdminTable() {
 
     const handleDeletePost = (postId) => {
         if (window.confirm("Are you sure you want to delete this post?")) {
-            fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`, {
+            fetch(`${root_url}/blogpost/${postId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`

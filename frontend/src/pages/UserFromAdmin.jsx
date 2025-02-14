@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import root_url from "../components/RootURL";
 
 export default function EditUser() {
     const { userId } = useParams();
@@ -12,7 +13,7 @@ export default function EditUser() {
     useEffect(() => {
         const token = localStorage.getItem("access_token");
 
-        fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
+        fetch(`${root_url}/user/${userId}`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -31,7 +32,7 @@ export default function EditUser() {
         const token = localStorage.getItem("access_token");
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
+            const response = await fetch(`${root_url}/user/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

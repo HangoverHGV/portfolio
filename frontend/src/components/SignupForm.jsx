@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/SigupForm.module.css";
+import root_url from "./RootURL";
 
 export default function SignupForm() {
     const [name, setName] = useState("");
@@ -11,7 +12,7 @@ export default function SignupForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = `${process.env.REACT_APP_API_URL}/user/`;
+        const url = `${root_url}/user/`;
         const userData = { name, email, password };
 
         try {

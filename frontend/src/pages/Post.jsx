@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import Navbar from "../components/NavBar";
 import styles from "../components/styles/Post.module.css";
+import root_url from "../components/RootURL";
 
 export default function Post() {
     const {postId} = useParams();
@@ -12,7 +13,7 @@ export default function Post() {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`);
+                const response = await fetch(`${root_url}/blogpost/${postId}`);
                 const data = await response.json();
                 setPost(data);
             } catch (error) {
@@ -24,7 +25,7 @@ export default function Post() {
             const token = localStorage.getItem("access_token");
             if (token) {
                 try {
-                    const response = await fetch(`${process.env.REACT_APP_API_URL}/user/my/user`, {
+                    const response = await fetch(`${root_url}/user/my/user`, {
                         method: "GET",
                         headers: {
                             "Authorization": `Bearer ${token}`
@@ -48,7 +49,7 @@ export default function Post() {
         const token = localStorage.getItem("access_token");
         if (token) {
             try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/blogpost/${postId}`, {
+                const response = await fetch(`${root_url}/blogpost/${postId}`, {
                     method: "DELETE",
                     headers: {
                         "Authorization": `Bearer ${token}`

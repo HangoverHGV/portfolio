@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import styles from "./styles/SigupForm.module.css";
+import root_url from "./RootURL";
 
 export default function LoginForm() {
     const [username, setUsername] = useState("");
@@ -10,7 +11,7 @@ export default function LoginForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = `${process.env.REACT_APP_API_URL}/user/token`;
+        const url = `${root_url}/user/token`;
         const formData = new URLSearchParams();
         formData.append("username", username);
         formData.append("password", password);
