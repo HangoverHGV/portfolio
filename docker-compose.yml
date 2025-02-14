@@ -22,6 +22,20 @@ services:
       SECRET_KEY: "SecretKey"
     depends_on:
       - db
+  app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-frontend
+    container_name: Frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/app
+    environment:
+      REACT_APP_API_URL: "http://localhost:8000"
+    depends_on:
+      - api
+
   db:
     image: postgres:latest
     volumes:
